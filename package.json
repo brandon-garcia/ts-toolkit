@@ -1,0 +1,19 @@
+{
+  "name": "ts-toolkit",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile": "tsc"
+  },
+  "author": "Brandon Garcia",
+  "license": "MIT",
+  "typeScriptVersion": "3.3",
+  "types": "src/@types/index",
+  "directories": {
+    "lib": "src"
+  },
+  "devDependencies": {
+    "typescript": "^3.3.*"
+  }
+}
