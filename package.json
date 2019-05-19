@@ -9,7 +9,6 @@
   "author": "Brandon Garcia",
   "license": "MIT",
   "typeScriptVersion": "3.3",
-  "types": "src/@types/index",
   "directories": {
     "lib": "src"
   },
