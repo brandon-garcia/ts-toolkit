@@ -1,7 +1,7 @@
 export declare const TypeUtils: {
     boolean: <T>(v: T) => v is (T & false) | (T & true);
-    field: <T extends any, FName extends keyof T, FType extends T[FName]>(obj: T, field: FName, validator: (value: unknown) => value is FType) => obj is T & { [_ in FName]: FType; };
-    optField: <T extends any, FName extends string, FType extends T[FName]>(obj: T, field: FName, validator: (value: unknown) => value is FType) => obj is T & { [_ in FName]?: FType | undefined; };
+    field: <T extends any, FName extends string, FType>(obj: T, field: FName, validator: (value: unknown) => value is FType) => obj is T & { [_ in FName]: FType; };
+    optField: <T extends any, FName extends string, FType>(obj: T, field: FName, validator: (value: unknown) => value is FType) => obj is T & { [_ in FName]?: FType | undefined; };
     nonEmptyString: <T>(v: T) => v is T & string;
     nonNull: <T>(v: T | null | undefined) => v is T;
     number: <T>(v: T) => v is T & number;

@@ -1,5 +1,5 @@
 
-const hasField = <T extends any, FName extends keyof T, FType extends T[FName]> (
+const hasField = <T extends any, FName extends string, FType> (
   obj: T,
   field: FName,
   validator: (value: unknown) => value is FType,
@@ -7,7 +7,7 @@ const hasField = <T extends any, FName extends keyof T, FType extends T[FName]> 
   return field in obj && validator(obj[field]);
 };
 
-const validateOptionalField = <T extends any, FName extends string, FType extends T[FName]> (
+const validateOptionalField = <T extends any, FName extends string, FType> (
   obj: T,
   field: FName,
   validator: (value: unknown) => value is FType,
