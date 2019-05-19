@@ -3,6 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const hasField = (obj, field, validator) => {
     return field in obj && validator(obj[field]);
 };
+const validateOptionalField = (obj, field, validator) => {
+    return !(field in obj) || validator(obj[field]);
+};
 const isNumber = (v) => typeof v === "number";
 const isString = (v) => typeof v === "string";
 const isObject = (v) => typeof v === "object";
@@ -13,6 +16,7 @@ const isNonEmptyString = (v) => isString(v) && v.length > 0;
 exports.TypeUtils = {
     boolean: isBoolean,
     field: hasField,
+    optField: validateOptionalField,
     nonEmptyString: isNonEmptyString,
     nonNull: isNonNull,
     number: isNumber,
