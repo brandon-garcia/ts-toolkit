@@ -2,7 +2,7 @@
   "name": "ts-toolkit",
   "version": "1.0.0",
   "description": "",
-  "main": "dist/index.js",
+  "main": "index.ts",
   "scripts": {
     "compile": "tsc"
   },
@@ -10,7 +10,7 @@
   "license": "MIT",
   "typeScriptVersion": "3.3",
   "directories": {
-    "lib": "src"
+    "lib": "."
   },
   "devDependencies": {
     "typescript": "^3.3.*"
