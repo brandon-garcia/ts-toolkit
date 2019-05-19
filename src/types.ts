@@ -7,6 +7,14 @@ const hasField = <T extends any, FName extends keyof T, FType extends T[FName]> 
   return field in obj && validator(obj[field]);
 };
 
+const validateOptionalField = <T extends any, FName extends string, FType extends T[FName]> (
+  obj: T,
+  field: FName,
+  validator: (value: unknown) => value is FType,
+): obj is T & { [_ in FName]?: FType } => {
+  return !(field in obj) || validator(obj[field])
+};
+
 const isNumber = <T> (v: T): v is T & number =>
   typeof v === "number";
 
@@ -31,6 +39,7 @@ const isNonEmptyString = <T> (v: T): v is T & string =>
 export const TypeUtils = {
   boolean: isBoolean,
   field: hasField,
+  optField: validateOptionalField,
   nonEmptyString: isNonEmptyString,
   nonNull: isNonNull,
   number: isNumber,
