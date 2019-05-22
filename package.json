@@ -1,6 +1,6 @@
 {
   "name": "@bcg-ts/ts-toolkit",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "author": {
@@ -8,6 +8,7 @@
     "email": "bcgarcia44@gmail.com"
   },
   "license": "MIT",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "compile": "tsc"
   },
