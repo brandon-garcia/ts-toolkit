@@ -1,6 +1,6 @@
 {
   "name": "@bcg-ts/ts-toolkit",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "",
   "main": "index.js",
   "author": {
@@ -19,7 +19,7 @@
     "type": "git",
     "url": "https://github.com/brandon-garcia/ts-toolkit.git"
   },
-  "dependencies": {
+  "devDependencies": {
     "typescript": "3.4.5"
   }
 }
