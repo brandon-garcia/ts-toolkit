@@ -1,15 +1,24 @@
 {
   "name": "@bcg-ts/ts-toolkit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
-  "main": "index.ts",
-  "author": "Brandon Garcia",
+  "main": "index.js",
+  "author": {
+    "name": "Brandon Garcia",
+    "email": "bcgarcia44@gmail.com"
+  },
   "license": "MIT",
+  "scripts": {
+    "compile": "tsc"
+  },
   "directories": {
     "lib": "."
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/brandon-garcia/ts-toolkit.git"
+  },
+  "dependencies": {
+    "typescript": "3.4.5"
   }
 }
