@@ -7,5 +7,9 @@
   "license": "MIT",
   "directories": {
     "lib": "."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/brandon-garcia/ts-toolkit.git"
   }
 }
