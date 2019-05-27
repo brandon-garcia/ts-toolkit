@@ -1,27 +1,32 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const hasField = (obj, field, validator) => {
-    return field in obj && validator(obj[field]);
-};
-const validateOptionalField = (obj, field, validator) => {
-    return !(field in obj) || validator(obj[field]);
-};
+const fn_1 = require("./fn");
+const hasField = (obj, field, validator) => field in obj && validator(obj[field]);
+const validateOptionalField = (obj, field, validator) => !(field in obj) || validator(obj[field]);
 const isNumber = (v) => typeof v === "number";
 const isString = (v) => typeof v === "string";
 const isObject = (v) => typeof v === "object";
 const isBoolean = (v) => typeof v === "boolean";
 const isNonNull = (v) => v != null;
+const isSymbol = (v) => typeof v === "symbol";
+const isFunction = (v) => typeof v === "function";
 const isUnknown = (v) => true;
 const isNonEmptyString = (v) => isString(v) && v.length > 0;
+const composeTypeGuard = (reducer, predicates) => (v) => predicates
+    .map(fn_1.FnUtils.bindInvoker(v))
+    .reduce(reducer);
 exports.TypeUtils = {
     boolean: isBoolean,
+    composeTypeGuard,
     field: hasField,
-    optField: validateOptionalField,
+    function: isFunction,
     nonEmptyString: isNonEmptyString,
     nonNull: isNonNull,
     number: isNumber,
     object: isObject,
+    optField: validateOptionalField,
     string: isString,
+    symbol: isSymbol,
     unknown: isUnknown,
 };
 //# sourceMappingURL=types.js.map

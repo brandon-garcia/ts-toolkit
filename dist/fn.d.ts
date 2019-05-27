@@ -9,7 +9,10 @@ export declare type AsyncFn3<P1, P2, P3, R> = Fn3<P1, P2, P3, Promise<R>>;
 export declare type Consumer<T> = Fn1<T, void>;
 export declare type Supplier<T> = Fn0<T>;
 export declare type Predicate<T> = Fn1<T, boolean>;
+export declare type Reducer<T> = Fn2<T, T, T>;
 export declare const FnUtils: {
+    bindInvoker: <T, R>(val: T) => (fn: Fn1<T, R>) => R;
     compose: <T1, T2, T3>(first: Fn1<T1, T2>, second: Fn1<T2, T3>) => Fn1<T1, T3>;
     ifElse: <R>(expr: boolean, onTrue: Fn0<R>, onFalse: Fn0<R>) => R;
+    makeBatchReducer: <T, R>(reducer: Fn2<R, R, R>, operations: Fn1<T, R>[]) => Fn1<T, R>;
 };
