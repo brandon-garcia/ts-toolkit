@@ -4,6 +4,7 @@ import {IOptional} from "../optional";
 export interface IPipeline<T1, T2> {
   alsoDo(fn: Consumer<T2>): IPipeline<T1, T2>;
   map<T3>(fn: Fn1<T2, T3>): IPipeline<T1, T3>;
+  filter(fn: Predicate<T2>): IPipeline<T1, IOptional<T2>>;
 
   apply(param: T1): T2;
   bind(param: T1): IBoundPipeline<T2>;
@@ -13,6 +14,7 @@ export interface IPipeline<T1, T2> {
 export interface IBoundPipeline<T1> {
   alsoDo(fn: Consumer<T1>): IBoundPipeline<T1>;
   map<T2>(fn: Fn1<T1, T2>): IBoundPipeline<T2>;
+  filter(fn: Predicate<T1>): IBoundPipeline<IOptional<T1>>;
 
   apply(): T1;
   toCallable(): Fn0<T1>;
