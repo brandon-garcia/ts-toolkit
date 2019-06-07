@@ -8,5 +8,6 @@ __export(require("./list"));
 __export(require("./optional"));
 __export(require("./pipeline/pipeline"));
 __export(require("./reductions"));
+__export(require("./strings"));
 __export(require("./types"));
 //# sourceMappingURL=index.js.map
