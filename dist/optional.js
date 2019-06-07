@@ -4,7 +4,6 @@ class Optional {
     constructor(value) {
         this.value = value;
     }
-    ;
     static of(value) {
         return new Optional(value);
     }
@@ -13,6 +12,17 @@ class Optional {
     }
     static empty() {
         return Optional.ofNullable(null);
+    }
+    static liftList(list) {
+        return Optional.of(Optional.unboxList(list));
+    }
+    static flatten(value) {
+        return value.orElseGet(Optional.empty);
+    }
+    static unboxList(list) {
+        return list
+            .filter((maybeItem) => maybeItem.isPresent())
+            .map((maybeItem) => maybeItem.getValue());
     }
     static coalesce(list) {
         for (let i = 0; i < list.length; ++i) {
@@ -27,6 +37,12 @@ class Optional {
     }
     getValue() {
         return this.orElseThrow(() => new Error('value must be nonnull'));
+    }
+    toProperty(field) {
+        if (this.value != null) {
+            return Optional.ofNullable(this.value[field]);
+        }
+        return Optional.empty();
     }
     filter(predicate) {
         if (this.value != null && predicate(this.value)) {

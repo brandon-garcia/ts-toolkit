@@ -1,4 +1,12 @@
 export declare type TypeGuard<KnownT, MaybeT extends KnownT> = (p: KnownT) => p is MaybeT;
+export declare type Fields<T> = {
+    [K in keyof T]: T[K] extends Function ? never : T[K];
+};
+export declare type Methods<T> = {
+    [K in keyof T]: T[K] extends Function ? T[K] : never;
+};
+export declare type FieldNames<T> = Fields<T>[keyof T];
+export declare type MethodNames<T> = Methods<T>[keyof T];
 export declare const TypeUtils: {
     boolean: <T>(v: T) => v is (T & false) | (T & true);
     composeTypeGuard: <KnownT, MaybeT extends KnownT>(reducer: import("./fn").Fn2<boolean, boolean, boolean>, predicates: TypeGuard<KnownT, MaybeT>[]) => TypeGuard<KnownT, MaybeT>;

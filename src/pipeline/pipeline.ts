@@ -18,7 +18,7 @@ export class Pipeline<T1, T2> implements IPipeline<T1, T2> {
   }
 
   public map<T3>(fn: Fn1<T2, T3>): IPipeline<T1, T3> {
-    return new Pipeline(FnUtils.compose(this.fn, fn));
+    return Pipeline.fromCallable(FnUtils.compose(this.fn, fn));
   }
 
   public filter(fn: Predicate<T2>): IPipeline<T1, IOptional<T2>> {
@@ -36,7 +36,6 @@ export class Pipeline<T1, T2> implements IPipeline<T1, T2> {
   public toCallable(): Fn1<T1, T2> {
     return this.fn;
   }
-
 }
 
 class BoundPipeline<T1, T2> implements IBoundPipeline<T2> {

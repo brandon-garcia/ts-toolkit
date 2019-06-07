@@ -42,9 +42,24 @@ const partial3 = <T1, T2, T3, R> (p1: T1, fn: Fn3<T1, T2, T3, R>) =>
 const partial4 = <T1, T2, T3, T4, R> (p1: T1, fn: Fn4<T1, T2, T3, T4, R>) =>
   (p2: T2, p3: T3, p4: T4) => fn(p1, p2, p3, p4);
 
+const doBefore = <F extends (...args: any[]) => any> (fn: F, op: (...args: Parameters<F>) => void) =>
+  (...args: Parameters<F>): ReturnType<F> => {
+    op(...args);
+    return fn(...args);
+  };
+
+const doAfter = <F extends (...args: any[]) => any> (fn: F, op: (retval: ReturnType<F>) => void) =>
+  (...args: Parameters<F>): ReturnType<F> => {
+    const retval = fn(...args);
+    op(retval);
+    return retval;
+  };
+
 export const FnUtils = {
   bindInvoker,
   compose,
+  doAfter,
+  doBefore,
   ifElse,
   makeBatchReducer,
   partial1,
