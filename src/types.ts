@@ -42,6 +42,9 @@ const isBoolean = <T> (v: T): v is T & boolean =>
 const isNonNull = <T> (v: T|undefined|null): v is T =>
   v != null;
 
+const isNull = <T> (v: T|undefined|null): v is null =>
+  v === null;
+
 const isSymbol = <T> (v: T): v is T & symbol =>
   typeof v === "symbol";
 
@@ -70,6 +73,7 @@ export const TypeUtils = {
   function: isFunction,
   nonEmptyString: isNonEmptyString,
   nonNull: isNonNull,
+  null: isNull,
   number: isNumber,
   object: isObject,
   optField: validateOptionalField,

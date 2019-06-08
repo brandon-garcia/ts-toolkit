@@ -8,6 +8,7 @@ const isString = (v) => typeof v === "string";
 const isObject = (v) => typeof v === "object";
 const isBoolean = (v) => typeof v === "boolean";
 const isNonNull = (v) => v != null;
+const isNull = (v) => v === null;
 const isSymbol = (v) => typeof v === "symbol";
 const isFunction = (v) => typeof v === "function";
 const isUnknown = (v) => true;
@@ -22,6 +23,7 @@ exports.TypeUtils = {
     function: isFunction,
     nonEmptyString: isNonEmptyString,
     nonNull: isNonNull,
+    null: isNull,
     number: isNumber,
     object: isObject,
     optField: validateOptionalField,
