@@ -38,6 +38,12 @@ class Optional {
     getValue() {
         return this.orElseThrow(() => new Error('value must be nonnull'));
     }
+    getNullableValue() {
+        if (this.value == null) {
+            return null;
+        }
+        return this.value;
+    }
     toProperty(field) {
         if (this.value != null) {
             return Optional.ofNullable(this.value[field]);

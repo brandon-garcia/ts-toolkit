@@ -2,6 +2,7 @@ import { Fn0, Fn1, Predicate } from "./fn";
 export interface IOptional<T> {
     isPresent(): boolean;
     getValue(): T;
+    getNullableValue(): T | null;
     toProperty<F extends keyof T>(field: F): IOptional<T[F]>;
     filter(predicate: Predicate<T>): IOptional<T>;
     map<R>(fn: Fn1<T, R>): IOptional<R>;
@@ -23,6 +24,7 @@ export declare class Optional<T> implements IOptional<T> {
     static coalesce<T>(list: Array<IOptional<T>>): IOptional<T>;
     isPresent(): boolean;
     getValue(): T;
+    getNullableValue(): T | null;
     toProperty<F extends keyof T>(field: F): IOptional<T[F]>;
     filter(predicate: Predicate<T>): IOptional<T>;
     map<R>(fn: Fn1<T, R>): IOptional<R>;
