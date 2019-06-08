@@ -3,6 +3,7 @@ import {Fn0, Fn1, Predicate} from "./fn";
 export interface IOptional<T> {
   isPresent(): boolean;
   getValue(): T;
+  getNullableValue(): T|null;
   toProperty<F extends keyof T>(field: F): IOptional<T[F]>;
   filter(predicate: Predicate<T>): IOptional<T>;
   map<R>(fn: Fn1<T, R>): IOptional<R>;
@@ -58,6 +59,13 @@ export class Optional<T> implements IOptional<T> {
 
   public getValue(): T {
     return this.orElseThrow(() => new Error('value must be nonnull'));
+  }
+
+  public getNullableValue(): T | null {
+    if (this.value == null) {
+      return null;
+    }
+    return this.value;
   }
 
   public toProperty<F extends keyof T>(field: F): IOptional<T[F]> {
