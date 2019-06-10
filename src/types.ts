@@ -45,6 +45,9 @@ const isNonNull = <T> (v: T|undefined|null): v is T =>
 const isNull = <T> (v: T|undefined|null): v is null =>
   v === null;
 
+const isUndefined = <T> (v: T|undefined|null): v is undefined =>
+  v === undefined;
+
 const isSymbol = <T> (v: T): v is T & symbol =>
   typeof v === "symbol";
 
@@ -74,6 +77,7 @@ export const TypeUtils = {
   nonEmptyString: isNonEmptyString,
   nonNull: isNonNull,
   null: isNull,
+  undefined: isUndefined,
   number: isNumber,
   object: isObject,
   optField: validateOptionalField,

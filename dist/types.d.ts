@@ -15,6 +15,7 @@ export declare const TypeUtils: {
     nonEmptyString: <T>(v: T) => v is T & string;
     nonNull: <T>(v: T | null | undefined) => v is T;
     null: <T>(v: T | null | undefined) => v is null;
+    undefined: <T>(v: T | null | undefined) => v is undefined;
     number: <T>(v: T) => v is T & number;
     object: <T>(v: T) => v is T & object;
     optField: <T extends any, FName extends string, FType>(obj: T, field: FName, validator: TypeGuard<unknown, FType>) => obj is T & Partial<Record<FName, FType>>;
