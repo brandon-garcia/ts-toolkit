@@ -11,7 +11,7 @@ class Optional {
         return value != null ? Optional.of(value) : Optional.empty();
     }
     static empty() {
-        return Optional.ofNullable(null);
+        return Optional.ofNullable();
     }
     static liftList(list) {
         return Optional.of(Optional.unboxList(list));
@@ -36,12 +36,6 @@ class Optional {
         return this.value != null;
     }
     getValue() {
-        return this.orElseThrow(() => new Error('value must be nonnull'));
-    }
-    getNullableValue() {
-        if (this.value == null) {
-            return null;
-        }
         return this.value;
     }
     toProperty(field) {
@@ -68,6 +62,18 @@ class Optional {
             return fn(this.value);
         }
         return Optional.empty();
+    }
+    defaultTo(defaultVal) {
+        if (this.value == null) {
+            return Optional.ofNullable(defaultVal);
+        }
+        return this;
+    }
+    defaultToSupplier(fn) {
+        if (this.value == null) {
+            return Optional.ofNullable(fn());
+        }
+        return this;
     }
     orElse(defaultVal) {
         if (this.value == null) {

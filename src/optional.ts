@@ -1,16 +1,23 @@
-import {Fn0, Fn1, Predicate} from "./fn";
+import {Fn0, Fn1, Predicate, Supplier} from "./fn";
 
 export interface IOptional<T> {
   isPresent(): boolean;
-  getValue(): T;
-  getNullableValue(): T|null;
+
+  getValue(): T | undefined ;
+
   toProperty<F extends keyof T>(field: F): IOptional<T[F]>;
+
   filter(predicate: Predicate<T>): IOptional<T>;
   map<R>(fn: Fn1<T, R>): IOptional<R>;
   flatMap<R>(fn: Fn1<T, IOptional<R>>): IOptional<R>;
+
+  defaultTo(defaultVal: T): IOptional<T>;
+  defaultToSupplier(fn: Supplier<T>): IOptional<T>;
+
   orElse(defaultVal: T): T;
   orElseGet(fn: Fn0<T>): T;
   orElseThrow<E extends Error>(fn: Fn0<E>): T | never;
+
   ifPresent(fn: Fn1<T, void>): IOptional<T>;
 }
 
@@ -22,12 +29,12 @@ export class Optional<T> implements IOptional<T> {
     return new Optional<T>(value);
   }
 
-  public static ofNullable<T>(value: T | null | undefined): IOptional<T> {
+  public static ofNullable<T>(value?: T | null | undefined): IOptional<T> {
     return value != null ? Optional.of<T>(value) : Optional.empty<T>();
   }
 
   public static empty<T>(): IOptional<T> {
-    return Optional.ofNullable<T>(null);
+    return Optional.ofNullable<T>();
   }
 
   public static liftList<T>(list: Array<IOptional<T>>): IOptional<T[]> {
@@ -41,7 +48,7 @@ export class Optional<T> implements IOptional<T> {
   public static unboxList<T>(list: Array<IOptional<T>>): T[] {
     return list
       .filter((maybeItem) => maybeItem.isPresent())
-      .map((maybeItem) => maybeItem.getValue());
+      .map((maybeItem) => maybeItem.getValue() as T);
   }
 
   public static coalesce<T>(list: Array<IOptional<T>>): IOptional<T> {
@@ -57,14 +64,7 @@ export class Optional<T> implements IOptional<T> {
     return this.value != null;
   }
 
-  public getValue(): T {
-    return this.orElseThrow(() => new Error('value must be nonnull'));
-  }
-
-  public getNullableValue(): T | null {
-    if (this.value == null) {
-      return null;
-    }
+  public getValue(): T | undefined {
     return this.value;
   }
 
@@ -95,6 +95,20 @@ export class Optional<T> implements IOptional<T> {
       return fn(this.value);
     }
     return Optional.empty<R>();
+  }
+
+  public defaultTo(defaultVal: T): IOptional<T> {
+    if (this.value == null) {
+      return Optional.ofNullable(defaultVal);
+    }
+    return this;
+  }
+
+  public defaultToSupplier(fn: () => T): IOptional<T> {
+    if (this.value == null) {
+      return Optional.ofNullable(fn());
+    }
+    return this;
   }
 
   public orElse(defaultVal: T): T {

@@ -55,6 +55,9 @@ const doAfter = <F extends (...args: any[]) => any> (fn: F, op: (retval: ReturnT
     return retval;
   };
 
+const matchCompose = <T, R, CaseType extends string|number|symbol> (matcher: Fn1<T, CaseType>, cases: Record<CaseType, Fn1<T, R>>) =>
+  (param: T) => cases[ matcher(param) ](param);
+
 export const FnUtils = {
   bindInvoker,
   compose,
@@ -66,5 +69,6 @@ export const FnUtils = {
   partial2,
   partial3,
   partial4,
+  matchCompose,
 };
 

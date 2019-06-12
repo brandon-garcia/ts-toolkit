@@ -24,4 +24,5 @@ export declare const FnUtils: {
     partial2: <T1, T2, R>(p1: T1, fn: Fn2<T1, T2, R>) => (p2: T2) => R;
     partial3: <T1, T2, T3, R>(p1: T1, fn: Fn3<T1, T2, T3, R>) => (p2: T2, p3: T3) => R;
     partial4: <T1, T2, T3, T4, R>(p1: T1, fn: Fn4<T1, T2, T3, T4, R>) => (p2: T2, p3: T3, p4: T4) => R;
+    matchCompose: <T, R, CaseType extends string | number | symbol>(matcher: Fn1<T, CaseType>, cases: Record<CaseType, Fn1<T, R>>) => (param: T) => R;
 };
