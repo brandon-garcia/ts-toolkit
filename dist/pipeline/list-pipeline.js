@@ -3,16 +3,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const fn_1 = require("../fn");
 const maybe_1 = require("../maybe");
 const pipeline_1 = require("./pipeline");
+const getFirst = (list) => {
+    if (list.length) {
+        return maybe_1.Maybe.of(list[0]);
+    }
+    return maybe_1.Maybe.empty();
+};
 class BridgeListPipeline {
     constructor(fn, pipeline) {
         this.fn = fn;
         this.pipeline = pipeline;
     }
     alsoDo(fn) {
-        return this.map((param) => {
-            fn(param);
-            return param;
-        });
+        return this.map(fn_1.FnUtils.liftConsumer(fn));
     }
     map(fn) {
         return new BridgeListPipeline(this.fn, this.pipeline.map(fn));
@@ -30,12 +33,7 @@ class BridgeListPipeline {
         return this.toPipeline().map((list) => list.reduce(fn));
     }
     toFirst() {
-        return this.toPipeline().map((list) => {
-            if (list.length) {
-                return maybe_1.Maybe.of(list[0]);
-            }
-            return maybe_1.Maybe.empty();
-        });
+        return this.toPipeline().map(getFirst);
     }
     apply(list) {
         return this.pipeline.apply(this.fn(list));
@@ -67,10 +65,7 @@ class ListPipeline {
         return ListPipeline.liftCallable(pipeline.toCallable());
     }
     alsoDo(fn) {
-        return this.map((param) => {
-            fn(param);
-            return param;
-        });
+        return this.map(fn_1.FnUtils.liftConsumer(fn));
     }
     map(fn) {
         return new ListPipeline(fn_1.FnUtils.compose(this.fn, fn));
@@ -88,12 +83,7 @@ class ListPipeline {
         return this.toPipeline().map((list) => list.reduce(fn));
     }
     toFirst() {
-        return this.toPipeline().map((list) => {
-            if (list.length) {
-                return maybe_1.Maybe.of(list[0]);
-            }
-            return maybe_1.Maybe.empty();
-        });
+        return this.toPipeline().map(getFirst);
     }
     apply(list) {
         return list.map(this.fn);
@@ -111,10 +101,7 @@ class ListPipeline {
 exports.ListPipeline = ListPipeline;
 class EmptyListPipeline {
     alsoDo(fn) {
-        return this.map((param) => {
-            fn(param);
-            return param;
-        });
+        return this.map(fn_1.FnUtils.liftConsumer(fn));
     }
     map(fn) {
         return ListPipeline.fromCallable(fn);
@@ -132,12 +119,7 @@ class EmptyListPipeline {
         return this.toPipeline().map((list) => list.reduce(fn));
     }
     toFirst() {
-        return this.toPipeline().map((list) => {
-            if (list.length) {
-                return maybe_1.Maybe.of(list[0]);
-            }
-            return maybe_1.Maybe.empty();
-        });
+        return this.toPipeline().map(getFirst);
     }
     apply(list) {
         return list;

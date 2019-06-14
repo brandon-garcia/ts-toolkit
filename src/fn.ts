@@ -56,6 +56,12 @@ const doAfter = <F extends (...args: any[]) => any> (fn: F, op: (retval: ReturnT
     return retval;
   };
 
+const liftConsumer = <T> (fn: Consumer<T>) =>
+  (param: T) => {
+    fn(param);
+    return param;
+  };
+
 const matchCompose = <T, R, CaseType extends string|number|symbol> (matcher: Fn<T, CaseType>, cases: Record<CaseType, Fn<T, R>>) =>
   (param: T) => cases[ matcher(param) ](param);
 
@@ -71,5 +77,6 @@ export const FnUtils = {
   partial3,
   partial4,
   matchCompose,
+  liftConsumer,
 };
 

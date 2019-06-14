@@ -3,6 +3,13 @@ import {IMaybe, Maybe} from "../maybe";
 import {Pipeline} from "./pipeline";
 import {IBoundListPipeline, IBoundPipeline, IListPipeline, IPipeline} from "./interface";
 
+const getFirst = <T> (list: T[]): IMaybe<T> => {
+  if (list.length) {
+    return Maybe.of(list[0]);
+  }
+  return Maybe.empty();
+};
+
 class BridgeListPipeline<T1, T2, T3> implements IListPipeline<T1, T3> {
 
   public constructor(
@@ -12,10 +19,7 @@ class BridgeListPipeline<T1, T2, T3> implements IListPipeline<T1, T3> {
   }
 
   public alsoDo(fn: Consumer<T3>): IListPipeline<T1, T3> {
-    return this.map((param: T3) => {
-      fn(param);
-      return param;
-    });
+    return this.map(FnUtils.liftConsumer(fn));
   }
 
   public map<T4>(fn: Fn<T3, T4>): IListPipeline<T1, T4> {
@@ -39,12 +43,7 @@ class BridgeListPipeline<T1, T2, T3> implements IListPipeline<T1, T3> {
   }
 
   public toFirst(): IPipeline<T1[], IMaybe<T3>> {
-    return this.toPipeline().map((list) => {
-      if (list.length) {
-        return Maybe.of(list[0]);
-      }
-      return Maybe.empty();
-    });
+    return this.toPipeline().map(getFirst);
   }
 
   public apply(list: T1[]): T3[] {
@@ -86,10 +85,7 @@ export class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
   }
 
   public alsoDo(fn: Consumer<T2>): IListPipeline<T1, T2> {
-    return this.map((param: T2) => {
-      fn(param);
-      return param;
-    });
+    return this.map(FnUtils.liftConsumer(fn));
   }
 
   public map<T3>(fn: Fn<T2, T3>): IListPipeline<T1, T3> {
@@ -113,12 +109,7 @@ export class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
   }
 
   public toFirst(): IPipeline<T1[], IMaybe<T2>> {
-    return this.toPipeline().map((list) => {
-      if (list.length) {
-        return Maybe.of(list[0]);
-      }
-      return Maybe.empty();
-    });
+    return this.toPipeline().map(getFirst);
   }
 
   public apply(list: T1[]): T2[] {
@@ -140,10 +131,7 @@ export class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
 
 class EmptyListPipeline<T1> implements IListPipeline<T1, T1> {
   public alsoDo(fn: Consumer<T1>): IListPipeline<T1, T1> {
-    return this.map((param: T1) => {
-      fn(param);
-      return param;
-    });
+    return this.map(FnUtils.liftConsumer(fn));
   }
 
   public map<T2>(fn: Fn<T1, T2>): IListPipeline<T1, T2> {
@@ -167,12 +155,7 @@ class EmptyListPipeline<T1> implements IListPipeline<T1, T1> {
   }
 
   public toFirst(): IPipeline<T1[], IMaybe<T1>> {
-    return this.toPipeline().map((list) => {
-      if (list.length) {
-        return Maybe.of(list[0]);
-      }
-      return Maybe.empty();
-    });
+    return this.toPipeline().map(getFirst);
   }
 
   public apply(list: T1[]): T1[] {

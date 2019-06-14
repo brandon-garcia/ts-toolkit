@@ -19,6 +19,10 @@ const doAfter = (fn, op) => (...args) => {
     op(retval);
     return retval;
 };
+const liftConsumer = (fn) => (param) => {
+    fn(param);
+    return param;
+};
 const matchCompose = (matcher, cases) => (param) => cases[matcher(param)](param);
 exports.FnUtils = {
     bindInvoker,
@@ -32,5 +36,6 @@ exports.FnUtils = {
     partial3,
     partial4,
     matchCompose,
+    liftConsumer,
 };
 //# sourceMappingURL=fn.js.map

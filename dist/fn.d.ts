@@ -26,4 +26,5 @@ export declare const FnUtils: {
     partial3: <T1, T2, T3, R>(p1: T1, fn: Fn3<T1, T2, T3, R>) => (p2: T2, p3: T3) => R;
     partial4: <T1, T2, T3, T4, R>(p1: T1, fn: Fn4<T1, T2, T3, T4, R>) => (p2: T2, p3: T3, p4: T4) => R;
     matchCompose: <T, R, CaseType extends string | number | symbol>(matcher: Fn<T, CaseType>, cases: Record<CaseType, Fn<T, R>>) => (param: T) => R;
+    liftConsumer: <T>(fn: Fn<T, void>) => (param: T) => T;
 };

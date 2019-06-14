@@ -14,7 +14,7 @@ export class Pipeline<T1, T2> implements IPipeline<T1, T2> {
   private constructor(private readonly fn: Fn<T1, T2>) {
   }
 
-  public alsoDo(fn: Fn<T2, void>): IPipeline<T1, T2> {
+  public alsoDo(fn: Consumer<T2>): IPipeline<T1, T2> {
     return this.map((param: T2) => {
       fn(param);
       return param;
