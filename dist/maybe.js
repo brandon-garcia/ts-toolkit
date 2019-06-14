@@ -1,23 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class Optional {
+class Maybe {
     constructor(value) {
         this.value = value;
     }
     static of(value) {
-        return new Optional(value);
+        return new Maybe(value);
     }
     static ofNullable(value) {
-        return value != null ? Optional.of(value) : Optional.empty();
+        return value != null ? Maybe.of(value) : Maybe.empty();
     }
     static empty() {
-        return Optional.ofNullable();
+        return Maybe.ofNullable();
     }
     static liftList(list) {
-        return Optional.of(Optional.unboxList(list));
+        return Maybe.of(Maybe.unboxList(list));
     }
     static flatten(value) {
-        return value.orElseGet(Optional.empty);
+        return value.orElseGet(Maybe.empty);
     }
     static unboxList(list) {
         return list
@@ -30,7 +30,7 @@ class Optional {
                 return list[i];
             }
         }
-        return Optional.empty();
+        return Maybe.empty();
     }
     isPresent() {
         return this.value != null;
@@ -40,38 +40,38 @@ class Optional {
     }
     toProperty(field) {
         if (this.value != null) {
-            return Optional.ofNullable(this.value[field]);
+            return Maybe.ofNullable(this.value[field]);
         }
-        return Optional.empty();
+        return Maybe.empty();
     }
     filter(predicate) {
         if (this.value != null && predicate(this.value)) {
             return this;
         }
-        return Optional.empty();
+        return Maybe.empty();
     }
     map(fn) {
         if (this.value != null) {
             const result = fn(this.value);
-            return Optional.ofNullable(result);
+            return Maybe.ofNullable(result);
         }
-        return Optional.empty();
+        return Maybe.empty();
     }
     flatMap(fn) {
         if (this.value != null) {
             return fn(this.value);
         }
-        return Optional.empty();
+        return Maybe.empty();
     }
     defaultTo(defaultVal) {
         if (this.value == null) {
-            return Optional.ofNullable(defaultVal);
+            return Maybe.ofNullable(defaultVal);
         }
         return this;
     }
     defaultToSupplier(fn) {
         if (this.value == null) {
-            return Optional.ofNullable(fn());
+            return Maybe.ofNullable(fn());
         }
         return this;
     }
@@ -100,5 +100,5 @@ class Optional {
         return this;
     }
 }
-exports.Optional = Optional;
-//# sourceMappingURL=optional.js.map
+exports.Maybe = Maybe;
+//# sourceMappingURL=maybe.js.map

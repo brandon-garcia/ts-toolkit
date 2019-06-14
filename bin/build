@@ -1,0 +1,13 @@
+#!/bin/bash
+########################################
+set -euf -o pipefail
+source $(dirname "${BASH_SOURCE[0]}")/.lib/include.bash
+########################################
+
+require_nonroot
+
+cd "$PROJ_DIR"
+rm -rf $PROJ_DIR/dist
+npm run compile
+cd "$ORIG_DIR"
+

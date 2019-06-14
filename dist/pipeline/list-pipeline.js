@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const fn_1 = require("../fn");
-const optional_1 = require("../optional");
+const maybe_1 = require("../maybe");
 const pipeline_1 = require("./pipeline");
 class BridgeListPipeline {
     constructor(fn, pipeline) {
@@ -32,9 +32,9 @@ class BridgeListPipeline {
     toFirst() {
         return this.toPipeline().map((list) => {
             if (list.length) {
-                return optional_1.Optional.of(list[0]);
+                return maybe_1.Maybe.of(list[0]);
             }
-            return optional_1.Optional.empty();
+            return maybe_1.Maybe.empty();
         });
     }
     apply(list) {
@@ -87,9 +87,9 @@ class ListPipeline {
     toFirst() {
         return this.toPipeline().map((list) => {
             if (list.length) {
-                return optional_1.Optional.of(list[0]);
+                return maybe_1.Maybe.of(list[0]);
             }
-            return optional_1.Optional.empty();
+            return maybe_1.Maybe.empty();
         });
     }
     apply(list) {
@@ -131,9 +131,9 @@ class EmptyListPipeline {
     toFirst() {
         return this.toPipeline().map((list) => {
             if (list.length) {
-                return optional_1.Optional.of(list[0]);
+                return maybe_1.Maybe.of(list[0]);
             }
-            return optional_1.Optional.empty();
+            return maybe_1.Maybe.empty();
         });
     }
     apply(list) {
