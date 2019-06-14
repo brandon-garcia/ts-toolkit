@@ -1,40 +1,51 @@
-import {Fn0, Fn1, Predicate, Supplier} from "./fn";
+import {Callback, Consumer, Fn, Predicate, Supplier} from "./fn";
 
-export interface IMaybe<T> {
-  isPresent(): boolean;
-
-  getValue(): T | undefined ;
-
+interface IMaybeBase<T> {
   toProperty<F extends keyof T>(field: F): IMaybe<T[F]>;
 
   filter(predicate: Predicate<T>): IMaybe<T>;
-  map<R>(fn: Fn1<T, R>): IMaybe<R>;
-  flatMap<R>(fn: Fn1<T, IMaybe<R>>): IMaybe<R>;
+  map<R>(fn: Fn<T, R>): IMaybe<R>;
+  flatMap<R>(fn: Fn<T, IMaybe<R>>): IMaybe<R>;
 
   defaultTo(defaultVal: T): IMaybe<T>;
   defaultToSupplier(fn: Supplier<T>): IMaybe<T>;
 
   orElse(defaultVal: T): T;
-  orElseGet(fn: Fn0<T>): T;
-  orElseThrow<E extends Error>(fn: Fn0<E>): T | never;
+  orElseGet(fn: Supplier<T>): T;
+  orElseThrow<E extends Error>(fn: Supplier<E>): T | never;
 
-  ifPresent(fn: Fn1<T, void>): IMaybe<T>;
+  ifPresent(fn: Consumer<T>): IMaybe<T>;
+  ifEmpty(fn: Callback): IMaybe<T>;
+}
+
+interface ISome<T> extends IMaybeBase<T> {
+  isPresent(): true;
+  isEmpty(): false;
+  getValue(): T;
+}
+
+interface INone<T> extends IMaybeBase<T> {
+  isPresent(): false;
+  isEmpty(): true;
+  getValue(): undefined;
+}
+
+export interface IMaybe<T> extends IMaybeBase<T> {
+  isPresent(): this is ISome<T>;
+  isEmpty(): this is INone<T>
+  getValue(): T | undefined ;
 }
 
 export class Maybe<T> implements IMaybe<T> {
-  private constructor(private value: T) {
+  private constructor(private value: T | null | undefined) {
   }
 
-  public static of<T>(value: T): IMaybe<T> {
+  public static of<T>(value?: T | null | undefined): IMaybe<T> {
     return new Maybe<T>(value);
   }
 
-  public static ofNullable<T>(value?: T | null | undefined): IMaybe<T> {
-    return value != null ? Maybe.of<T>(value) : Maybe.empty<T>();
-  }
-
-  public static empty<T>(): IMaybe<T> {
-    return Maybe.ofNullable<T>();
+  public static empty<T>(): INone<T> {
+    return Maybe.of<T>() as INone<T>;
   }
 
   public static liftList<T>(list: Array<IMaybe<T>>): IMaybe<T[]> {
@@ -60,17 +71,21 @@ export class Maybe<T> implements IMaybe<T> {
     return Maybe.empty<T>();
   }
 
-  public isPresent(): boolean {
+  public isPresent(): this is ISome<T> {
     return this.value != null;
   }
 
+  public isEmpty(): this is INone<T> {
+    return !this.isPresent();
+  }
+
   public getValue(): T | undefined {
-    return this.value;
+    return this.value == null ? undefined : this.value;
   }
 
   public toProperty<F extends keyof T>(field: F): IMaybe<T[F]> {
     if (this.value != null) {
-      return Maybe.ofNullable(this.value[field]);
+      return Maybe.of(this.value[field]);
     }
     return Maybe.empty();
   }
@@ -82,15 +97,15 @@ export class Maybe<T> implements IMaybe<T> {
     return Maybe.empty<T>();
   }
 
-  public map<R>(fn: Fn1<T, R>): IMaybe<R> {
+  public map<R>(fn: Fn<T, R>): IMaybe<R> {
     if (this.value != null) {
       const result = fn(this.value);
-      return Maybe.ofNullable(result);
+      return Maybe.of(result);
     }
     return Maybe.empty<R>();
   }
 
-  public flatMap<R>(fn: Fn1<T, IMaybe<R>>): IMaybe<R> {
+  public flatMap<R>(fn: Fn<T, IMaybe<R>>): IMaybe<R> {
     if (this.value != null) {
       return fn(this.value);
     }
@@ -99,14 +114,14 @@ export class Maybe<T> implements IMaybe<T> {
 
   public defaultTo(defaultVal: T): IMaybe<T> {
     if (this.value == null) {
-      return Maybe.ofNullable(defaultVal);
+      return Maybe.of(defaultVal);
     }
     return this;
   }
 
   public defaultToSupplier(fn: () => T): IMaybe<T> {
     if (this.value == null) {
-      return Maybe.ofNullable(fn());
+      return Maybe.of(fn());
     }
     return this;
   }
@@ -118,23 +133,30 @@ export class Maybe<T> implements IMaybe<T> {
     return this.value;
   }
 
-  public orElseGet(fn: Fn0<T>): T {
+  public orElseGet(fn: Supplier<T>): T {
     if (this.value == null) {
       return fn();
     }
     return this.value;
   }
 
-  public orElseThrow<E extends Error>(fn: Fn0<E>): T | never {
+  public orElseThrow<E extends Error>(fn: Supplier<E>): T | never {
     if (this.value == null) {
       throw fn();
     }
     return this.value;
   }
 
-  public ifPresent(fn: Fn1<T, void>): IMaybe<T> {
+  public ifPresent(fn: Consumer<T>): IMaybe<T> {
     if (this.value != null) {
       fn(this.value);
+    }
+    return this;
+  }
+
+  public ifEmpty(fn: Callback): IMaybe<T> {
+    if (this.value == null) {
+      fn();
     }
     return this;
   }

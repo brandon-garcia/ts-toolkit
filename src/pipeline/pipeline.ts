@@ -1,23 +1,27 @@
-import {Consumer, Fn0, Fn1, FnUtils, Predicate} from "../fn";
+import {Consumer, Fn, FnUtils, Predicate, Supplier} from "../fn";
 import {IBoundPipeline, IPipeline} from "./interface";
 import {IMaybe, Maybe} from "../maybe";
 
 export class Pipeline<T1, T2> implements IPipeline<T1, T2> {
-  public static fromCallable<T1, T2>(fn: Fn1<T1, T2>): IPipeline<T1, T2> {
+  public static identity<T>(): IPipeline<T, T> {
+    return new Pipeline<T, T>((param) => param);
+  }
+
+  public static fromCallable<T1, T2>(fn: Fn<T1, T2>): IPipeline<T1, T2> {
     return new Pipeline(fn);
   }
 
-  private constructor(private readonly fn: Fn1<T1, T2>) {
+  private constructor(private readonly fn: Fn<T1, T2>) {
   }
 
-  public alsoDo(fn: Fn1<T2, void>): IPipeline<T1, T2> {
+  public alsoDo(fn: Fn<T2, void>): IPipeline<T1, T2> {
     return this.map((param: T2) => {
       fn(param);
       return param;
     });
   }
 
-  public map<T3>(fn: Fn1<T2, T3>): IPipeline<T1, T3> {
+  public map<T3>(fn: Fn<T2, T3>): IPipeline<T1, T3> {
     return Pipeline.fromCallable(FnUtils.compose(this.fn, fn));
   }
 
@@ -33,7 +37,7 @@ export class Pipeline<T1, T2> implements IPipeline<T1, T2> {
     return new BoundPipeline(param, this);
   }
 
-  public toCallable(): Fn1<T1, T2> {
+  public toCallable(): Fn<T1, T2> {
     return this.fn;
   }
 }
@@ -49,7 +53,7 @@ class BoundPipeline<T1, T2> implements IBoundPipeline<T2> {
     return this.pipeline.alsoDo(fn).bind(this.param);
   }
 
-  public map<T3>(fn: Fn1<T2, T3>): IBoundPipeline<T3> {
+  public map<T3>(fn: Fn<T2, T3>): IBoundPipeline<T3> {
     return this.pipeline.map(fn).bind(this.param);
   }
 
@@ -61,7 +65,7 @@ class BoundPipeline<T1, T2> implements IBoundPipeline<T2> {
     return this.pipeline.apply(this.param);
   }
 
-  public toCallable(): Fn0<T2> {
+  public toCallable(): Supplier<T2> {
     return this.apply.bind(this);
   }
 }

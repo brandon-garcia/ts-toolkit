@@ -54,6 +54,9 @@ class ListPipeline {
     constructor(fn) {
         this.fn = fn;
     }
+    static identity() {
+        return new ListPipeline((param) => param);
+    }
     static fromCallable(fn) {
         return new ListPipeline(fn);
     }
@@ -154,6 +157,9 @@ class BoundListPipeline {
         this.list = list;
         this.pipeline = pipeline;
     }
+    static of(list) {
+        return new BoundListPipeline(list, ListPipeline.identity());
+    }
     alsoDo(fn) {
         return this.pipeline.alsoDo(fn).bind(this.list);
     }
@@ -185,4 +191,5 @@ class BoundListPipeline {
         return this.pipeline.toPipeline().bind(this.list);
     }
 }
+exports.BoundListPipeline = BoundListPipeline;
 //# sourceMappingURL=list-pipeline.js.map

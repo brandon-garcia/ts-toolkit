@@ -6,6 +6,9 @@ class Pipeline {
     constructor(fn) {
         this.fn = fn;
     }
+    static identity() {
+        return new Pipeline((param) => param);
+    }
     static fromCallable(fn) {
         return new Pipeline(fn);
     }

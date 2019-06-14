@@ -7,11 +7,8 @@ class Maybe {
     static of(value) {
         return new Maybe(value);
     }
-    static ofNullable(value) {
-        return value != null ? Maybe.of(value) : Maybe.empty();
-    }
     static empty() {
-        return Maybe.ofNullable();
+        return Maybe.of();
     }
     static liftList(list) {
         return Maybe.of(Maybe.unboxList(list));
@@ -35,12 +32,15 @@ class Maybe {
     isPresent() {
         return this.value != null;
     }
+    isEmpty() {
+        return !this.isPresent();
+    }
     getValue() {
-        return this.value;
+        return this.value == null ? undefined : this.value;
     }
     toProperty(field) {
         if (this.value != null) {
-            return Maybe.ofNullable(this.value[field]);
+            return Maybe.of(this.value[field]);
         }
         return Maybe.empty();
     }
@@ -53,7 +53,7 @@ class Maybe {
     map(fn) {
         if (this.value != null) {
             const result = fn(this.value);
-            return Maybe.ofNullable(result);
+            return Maybe.of(result);
         }
         return Maybe.empty();
     }
@@ -65,13 +65,13 @@ class Maybe {
     }
     defaultTo(defaultVal) {
         if (this.value == null) {
-            return Maybe.ofNullable(defaultVal);
+            return Maybe.of(defaultVal);
         }
         return this;
     }
     defaultToSupplier(fn) {
         if (this.value == null) {
-            return Maybe.ofNullable(fn());
+            return Maybe.of(fn());
         }
         return this;
     }
@@ -96,6 +96,12 @@ class Maybe {
     ifPresent(fn) {
         if (this.value != null) {
             fn(this.value);
+        }
+        return this;
+    }
+    ifEmpty(fn) {
+        if (this.value == null) {
+            fn();
         }
         return this;
     }
