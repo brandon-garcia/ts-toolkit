@@ -10,6 +10,8 @@ export interface IPipeline<T1, T2> {
   filter<S2 extends T2>(fn: TypeGuard<T2, S2>): IPipeline<T1, IOptional<S2>>
   filter(fn: Predicate<T2>): IPipeline<T1, IOptional<T2>>;
 
+  filterProperty<F extends keyof T2>(field: F, fn: Predicate<T2[F]>): IPipeline<T1, IOptional<T2>>;
+
   apply(param: T1): T2;
   bind(param: T1): IBoundPipeline<T2>;
   toCallable(): Fn<T1, T2>;
@@ -22,6 +24,8 @@ export interface IBoundPipeline<T1> {
 
   filter<S1 extends T1>(fn: TypeGuard<T1, S1>): IBoundPipeline<IOptional<S1>>;
   filter(fn: Predicate<T1>): IBoundPipeline<IOptional<T1>>;
+
+  filterProperty<F extends keyof T1>(field: F, fn: Predicate<T1[F]>): IBoundPipeline<IOptional<T1>>;
 
   apply(): T1;
   toCallable(): Supplier<T1>;
@@ -37,6 +41,8 @@ export interface IListPipeline<T1, T2> {
 
   filter<S2 extends T2>(fn: TypeGuard<T2, S2>): IListPipeline<T1, S2>;
   filter(fn: Predicate<T2>): IListPipeline<T1, T2>;
+
+  filterProperty<F extends keyof T2>(field: F, fn: Predicate<T2[F]>): IListPipeline<T1, T2>;
 
   apply(list: T1[]): T2[];
   bind(list: T1[]): IBoundListPipeline<T2>;
@@ -55,6 +61,8 @@ export interface IBoundListPipeline<T1> {
 
   filter<S1 extends T1>(fn: TypeGuard<T1, S1>): IBoundListPipeline<S1>;
   filter(fn: Predicate<T1>): IBoundListPipeline<T1>;
+
+  filterProperty<F extends keyof T1>(field: F, fn: Predicate<T1[F]>): IBoundListPipeline<T1>;
 
   apply(): T1[];
   toCallable(): Supplier<T1[]>;

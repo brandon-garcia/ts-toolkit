@@ -42,6 +42,10 @@ class BridgeListPipeline<T1, T2, T3> implements IListPipeline<T1, T3> {
     return new BridgeListPipeline(this.fn, this.pipeline.filter(fn));
   }
 
+  public filterProperty<F extends keyof T3>(field: F, fn: Predicate<T3[F]>): IListPipeline<T1, T3> {
+    return new BridgeListPipeline(this.fn, this.pipeline.filterProperty(field, fn));
+  }
+
   public reduce(fn: Reducer<T3>): IPipeline<T1[], T3> {
     return this.toPipeline().map((list) => list.reduce(fn));
   }
@@ -115,6 +119,10 @@ export class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
     return this.flatMap((list) => list.filter(fn));
   }
 
+  public filterProperty<F extends keyof T2>(field: F, fn: Predicate<T2[F]>): IListPipeline<T1, T2> {
+    return this.filter(FnUtils.compose(FnUtils.liftProperty(field), fn))
+  }
+
   public reduce(fn: Reducer<T2>): IPipeline<T1[], T2> {
     return this.toPipeline().map((list) => list.reduce(fn))
   }
@@ -163,6 +171,10 @@ class EmptyListPipeline<T1> implements IListPipeline<T1, T1> {
 
   public filter(fn: Predicate<T1>): IListPipeline<T1, T1> {
     return this.flatMap((list) => list.filter(fn));
+  }
+
+  public filterProperty<F extends keyof T1>(field: F, fn: Predicate<T1[F]>): IListPipeline<T1, T1> {
+    return this.filter(FnUtils.compose(FnUtils.liftProperty(field), fn))
   }
 
   public reduce(fn: Reducer<T1>): IPipeline<T1[], T1> {
@@ -219,6 +231,10 @@ class BoundListPipeline<T1, T2> implements IBoundListPipeline<T2> {
 
   public filter(fn: Predicate<T2>): IBoundListPipeline<T2> {
     return this.pipeline.filter(fn).bind(this.list);
+  }
+
+  public filterProperty<F extends keyof T2>(field: F, fn: Predicate<T2[F]>): IBoundListPipeline<T2> {
+    return this.pipeline.filterProperty(field, fn).bind(this.list);
   }
 
   public reduce(fn: Reducer<T2>): IBoundPipeline<T2> {

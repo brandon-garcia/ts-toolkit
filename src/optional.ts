@@ -6,6 +6,8 @@ interface IOptionBase<T> {
   filter<S extends T>(predicate: TypeGuard<T, S>): IOptional<S>;
   filter(predicate: Predicate<T>): IOptional<T>;
 
+  filterProperty<F extends keyof T>(field: F, predicate: Predicate<T[F]>): IOptional<T>;
+
   map<R>(fn: Fn<T, R>): IOptional<R>;
   mapToProperty<F extends keyof T>(field: F): IOptional<T[F]>;
   flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R>;
@@ -96,6 +98,10 @@ export class Optional<T> implements IOptional<T> {
       return this;
     }
     return Optional.none<T>();
+  }
+
+  public filterProperty<F extends keyof T>(field: F, predicate: Predicate<T[F]>): IOptional<T> {
+    return this.filter((v) => predicate(v[field]));
   }
 
   public map<R>(fn: Fn<T, R>): IOptional<R> {

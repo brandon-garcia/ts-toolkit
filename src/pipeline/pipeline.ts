@@ -34,6 +34,10 @@ export class Pipeline<T1, T2> implements IPipeline<T1, T2> {
     return this.map((val) => Optional.of(val).filter(fn));
   }
 
+  public filterProperty<F extends keyof T2>(field: F, fn: Predicate<T2[F]>): IPipeline<T1, IOptional<T2>> {
+    return this.map((val) => Optional.of(val).filterProperty(field, fn));
+  }
+
   public apply(param: T1): T2 {
     return this.fn(param);
   }
@@ -62,6 +66,10 @@ class EmptyPipeline<T> implements IPipeline<T, T> {
 
   public filter(fn: Predicate<T>): IPipeline<T, IOptional<T>> {
     return this.map((val) => Optional.of(val).filter(fn));
+  }
+
+  public filterProperty<F extends keyof T>(field: F, fn: Predicate<T[F]>): IPipeline<T, IOptional<T>> {
+    return this.map((val) => Optional.of(val).filterProperty(field, fn));
   }
 
   public map<T2>(fn: Fn<T, T2>): IPipeline<T, T2> {
@@ -98,6 +106,10 @@ class BoundPipeline<T1, T2> implements IBoundPipeline<T2> {
 
   public filter(fn: Predicate<T2>): IBoundPipeline<IOptional<T2>> {
     return this.map((val) => Optional.of(val).filter(fn));
+  }
+
+  public filterProperty<F extends keyof T2>(field: F, fn: Predicate<T2[F]>): IBoundPipeline<IOptional<T2>> {
+    return this.map((val) => Optional.of(val).filterProperty(field, fn));
   }
 
   public apply(): T2 {
