@@ -1,3 +1,4 @@
+export * from "./applicator";
 export * from "./fn";
 export * from "./list";
 export * from "./null";

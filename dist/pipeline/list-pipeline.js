@@ -62,7 +62,7 @@ class ListPipeline {
         return new ListPipeline(fn);
     }
     static liftCallable(fn) {
-        return new BridgeListPipeline(fn, new EmptyListPipeline());
+        return new BridgeListPipeline(fn, ListPipeline.identity());
     }
     static liftPipeline(pipeline) {
         return ListPipeline.liftCallable(pipeline.toCallable());
