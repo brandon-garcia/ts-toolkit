@@ -1,20 +1,23 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class Maybe {
+class Optional {
     constructor(value) {
         this.value = value;
     }
     static of(value) {
-        return new Maybe(value);
+        return new Optional(value);
     }
-    static empty() {
-        return Maybe.of();
+    static some(value) {
+        return Optional.of(value);
+    }
+    static none() {
+        return Optional.of();
     }
     static liftList(list) {
-        return Maybe.of(Maybe.unboxList(list));
+        return Optional.some(Optional.unboxList(list));
     }
     static flatten(value) {
-        return value.orElseGet(Maybe.empty);
+        return value.orElseGet(Optional.none).getValue();
     }
     static unboxList(list) {
         return list
@@ -27,7 +30,7 @@ class Maybe {
                 return list[i];
             }
         }
-        return Maybe.empty();
+        return Optional.none();
     }
     isPresent() {
         return this.value != null;
@@ -40,58 +43,46 @@ class Maybe {
     }
     toProperty(field) {
         if (this.value != null) {
-            return Maybe.of(this.value[field]);
+            return Optional.of(this.value[field]);
         }
-        return Maybe.empty();
+        return Optional.none();
     }
     filter(predicate) {
         if (this.value != null && predicate(this.value)) {
             return this;
         }
-        return Maybe.empty();
+        return Optional.none();
     }
     map(fn) {
         if (this.value != null) {
             const result = fn(this.value);
-            return Maybe.of(result);
+            return Optional.of(result);
         }
-        return Maybe.empty();
+        return Optional.none();
     }
     flatMap(fn) {
         if (this.value != null) {
             return fn(this.value);
         }
-        return Maybe.empty();
-    }
-    defaultTo(defaultVal) {
-        if (this.value == null) {
-            return Maybe.of(defaultVal);
-        }
-        return this;
-    }
-    defaultToSupplier(fn) {
-        if (this.value == null) {
-            return Maybe.of(fn());
-        }
-        return this;
+        return Optional.none();
     }
     orElse(defaultVal) {
-        if (this.value == null) {
-            return defaultVal;
+        if (this.isPresent()) {
+            return this;
         }
-        return this.value;
+        return Optional.some(defaultVal);
     }
     orElseGet(fn) {
-        if (this.value == null) {
-            return fn();
+        if (this.isPresent()) {
+            return this;
         }
-        return this.value;
+        return Optional.some(fn());
     }
     orElseThrow(fn) {
-        if (this.value == null) {
-            throw fn();
+        if (this.isPresent()) {
+            return this;
         }
-        return this.value;
+        throw fn();
     }
     ifPresent(fn) {
         if (this.value != null) {
@@ -106,5 +97,5 @@ class Maybe {
         return this;
     }
 }
-exports.Maybe = Maybe;
-//# sourceMappingURL=maybe.js.map
+exports.Optional = Optional;
+//# sourceMappingURL=optional.js.map

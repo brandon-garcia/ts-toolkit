@@ -1,6 +1,6 @@
 import {Consumer, Fn, FnUtils, Predicate, Supplier} from "../fn";
 import {IBoundPipeline, IPipeline} from "./interface";
-import {IMaybe, Maybe} from "../maybe";
+import {IOptional, Optional} from "../optional";
 
 export class Pipeline<T1, T2> implements IPipeline<T1, T2> {
   public static identity<T>(): IPipeline<T, T> {
@@ -25,8 +25,8 @@ export class Pipeline<T1, T2> implements IPipeline<T1, T2> {
     return Pipeline.fromCallable(FnUtils.compose(this.fn, fn));
   }
 
-  public filter(fn: Predicate<T2>): IPipeline<T1, IMaybe<T2>> {
-    return this.map((val: T2) => fn(val) ? Maybe.of(val) : Maybe.empty())
+  public filter(fn: Predicate<T2>): IPipeline<T1, IOptional<T2>> {
+    return this.map((val: T2) => fn(val) ? Optional.of(val) : Optional.none())
   }
 
   public apply(param: T1): T2 {
@@ -57,8 +57,8 @@ class BoundPipeline<T1, T2> implements IBoundPipeline<T2> {
     return this.pipeline.map(fn).bind(this.param);
   }
 
-  public filter(fn: Predicate<T2>): IBoundPipeline<IMaybe<T2>> {
-    return this.map((val: T2) => fn(val) ? Maybe.of(val) : Maybe.empty());
+  public filter(fn: Predicate<T2>): IBoundPipeline<IOptional<T2>> {
+    return this.map((val: T2) => fn(val) ? Optional.of(val) : Optional.none());
   }
 
   public apply(): T2 {

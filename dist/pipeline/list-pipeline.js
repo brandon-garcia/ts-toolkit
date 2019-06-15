@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const fn_1 = require("../fn");
-const maybe_1 = require("../maybe");
+const optional_1 = require("../optional");
 const pipeline_1 = require("./pipeline");
 const getFirst = (list) => {
     if (list.length) {
-        return maybe_1.Maybe.of(list[0]);
+        return optional_1.Optional.some(list[0]);
     }
-    return maybe_1.Maybe.empty();
+    return optional_1.Optional.none();
 };
 class BridgeListPipeline {
     constructor(fn, pipeline) {

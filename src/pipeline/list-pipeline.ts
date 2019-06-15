@@ -1,13 +1,13 @@
 import {Comparator, Consumer, Fn, FnUtils, Predicate, Reducer, Supplier} from "../fn";
-import {IMaybe, Maybe} from "../maybe";
+import {IOptional, Optional} from "../optional";
 import {Pipeline} from "./pipeline";
 import {IBoundListPipeline, IBoundPipeline, IListPipeline, IPipeline} from "./interface";
 
-const getFirst = <T> (list: T[]): IMaybe<T> => {
+const getFirst = <T> (list: T[]): IOptional<T> => {
   if (list.length) {
-    return Maybe.of(list[0]);
+    return Optional.some(list[0]);
   }
-  return Maybe.empty();
+  return Optional.none();
 };
 
 class BridgeListPipeline<T1, T2, T3> implements IListPipeline<T1, T3> {
@@ -42,7 +42,7 @@ class BridgeListPipeline<T1, T2, T3> implements IListPipeline<T1, T3> {
     return this.toPipeline().map((list) => list.reduce(fn));
   }
 
-  public toFirst(): IPipeline<T1[], IMaybe<T3>> {
+  public toFirst(): IPipeline<T1[], IOptional<T3>> {
     return this.toPipeline().map(getFirst);
   }
 
@@ -108,7 +108,7 @@ export class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
     return this.toPipeline().map((list) => list.reduce(fn))
   }
 
-  public toFirst(): IPipeline<T1[], IMaybe<T2>> {
+  public toFirst(): IPipeline<T1[], IOptional<T2>> {
     return this.toPipeline().map(getFirst);
   }
 
@@ -154,7 +154,7 @@ class EmptyListPipeline<T1> implements IListPipeline<T1, T1> {
     return this.toPipeline().map((list: T1[]) => list.reduce(fn))
   }
 
-  public toFirst(): IPipeline<T1[], IMaybe<T1>> {
+  public toFirst(): IPipeline<T1[], IOptional<T1>> {
     return this.toPipeline().map(getFirst);
   }
 
@@ -211,7 +211,7 @@ export class BoundListPipeline<T1, T2> implements IBoundListPipeline<T2> {
     return this.pipeline.reduce(fn).bind(this.list);
   }
 
-  public toFirst(): IBoundPipeline<IMaybe<T2>> {
+  public toFirst(): IBoundPipeline<IOptional<T2>> {
     return this.pipeline.toFirst().bind(this.list);
   }
 

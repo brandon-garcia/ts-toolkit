@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const fn_1 = require("../fn");
-const maybe_1 = require("../maybe");
+const optional_1 = require("../optional");
 class Pipeline {
     constructor(fn) {
         this.fn = fn;
@@ -22,7 +22,7 @@ class Pipeline {
         return Pipeline.fromCallable(fn_1.FnUtils.compose(this.fn, fn));
     }
     filter(fn) {
-        return this.map((val) => fn(val) ? maybe_1.Maybe.of(val) : maybe_1.Maybe.empty());
+        return this.map((val) => fn(val) ? optional_1.Optional.of(val) : optional_1.Optional.none());
     }
     apply(param) {
         return this.fn(param);
@@ -47,7 +47,7 @@ class BoundPipeline {
         return this.pipeline.map(fn).bind(this.param);
     }
     filter(fn) {
-        return this.map((val) => fn(val) ? maybe_1.Maybe.of(val) : maybe_1.Maybe.empty());
+        return this.map((val) => fn(val) ? optional_1.Optional.of(val) : optional_1.Optional.none());
     }
     apply() {
         return this.pipeline.apply(this.param);

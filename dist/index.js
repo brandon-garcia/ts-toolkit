@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./fn"));
 __export(require("./list"));
 __export(require("./null"));
-__export(require("./maybe"));
+__export(require("./optional"));
 __export(require("./pipeline"));
 __export(require("./reductions"));
 __export(require("./strings"));
