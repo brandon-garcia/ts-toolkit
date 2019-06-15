@@ -5,7 +5,7 @@ import {IBoundListPipeline, IBoundPipeline, IListPipeline, IPipeline} from "./in
 
 const getFirst = <T> (list: T[]): IOptional<T> => {
   if (list.length) {
-    return Optional.some(list[0]);
+    return Optional.of(list[0]);
   }
   return Optional.none();
 };

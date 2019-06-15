@@ -5,7 +5,7 @@ const optional_1 = require("../optional");
 const pipeline_1 = require("./pipeline");
 const getFirst = (list) => {
     if (list.length) {
-        return optional_1.Optional.some(list[0]);
+        return optional_1.Optional.of(list[0]);
     }
     return optional_1.Optional.none();
 };

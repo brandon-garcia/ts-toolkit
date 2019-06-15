@@ -43,7 +43,7 @@ class Optional {
         return this.value == null ? undefined : this.value;
     }
     mapToProperty(field) {
-        return this.map(fn_1.FnUtils.liftProperty(field));
+        return this.flatMap(fn_1.FnUtils.compose(fn_1.FnUtils.liftProperty(field), Optional.of));
     }
     filter(predicate) {
         if (this.value != null && predicate(this.value)) {
@@ -52,7 +52,7 @@ class Optional {
         return Optional.none();
     }
     filterProperty(field, predicate) {
-        return this.filter((v) => predicate(v[field]));
+        return this.filter((val) => val[field] != null ? predicate(val[field]) : false);
     }
     map(fn) {
         if (this.value != null) {
