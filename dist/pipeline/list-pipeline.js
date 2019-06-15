@@ -32,6 +32,9 @@ class BridgeListPipeline {
     filter(fn) {
         return new BridgeListPipeline(this.fn, this.pipeline.filter(fn));
     }
+    filterProperty(field, fn) {
+        return new BridgeListPipeline(this.fn, this.pipeline.filterProperty(field, fn));
+    }
     reduce(fn) {
         return this.toPipeline().map((list) => list.reduce(fn));
     }
@@ -88,6 +91,9 @@ class ListPipeline {
     filter(fn) {
         return this.flatMap((list) => list.filter(fn));
     }
+    filterProperty(field, fn) {
+        return this.filter(fn_1.FnUtils.compose(fn_1.FnUtils.liftProperty(field), fn));
+    }
     reduce(fn) {
         return this.toPipeline().map((list) => list.reduce(fn));
     }
@@ -126,6 +132,9 @@ class EmptyListPipeline {
     }
     filter(fn) {
         return this.flatMap((list) => list.filter(fn));
+    }
+    filterProperty(field, fn) {
+        return this.filter(fn_1.FnUtils.compose(fn_1.FnUtils.liftProperty(field), fn));
     }
     reduce(fn) {
         return this.toPipeline().map((list) => list.reduce(fn));
@@ -168,6 +177,9 @@ class BoundListPipeline {
     }
     filter(fn) {
         return this.pipeline.filter(fn).bind(this.list);
+    }
+    filterProperty(field, fn) {
+        return this.pipeline.filterProperty(field, fn).bind(this.list);
     }
     reduce(fn) {
         return this.pipeline.reduce(fn).bind(this.list);

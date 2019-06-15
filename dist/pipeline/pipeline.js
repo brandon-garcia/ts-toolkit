@@ -27,6 +27,9 @@ class Pipeline {
     filter(fn) {
         return this.map((val) => optional_1.Optional.of(val).filter(fn));
     }
+    filterProperty(field, fn) {
+        return this.map((val) => optional_1.Optional.of(val).filterProperty(field, fn));
+    }
     apply(param) {
         return this.fn(param);
     }
@@ -50,6 +53,9 @@ class EmptyPipeline {
     }
     filter(fn) {
         return this.map((val) => optional_1.Optional.of(val).filter(fn));
+    }
+    filterProperty(field, fn) {
+        return this.map((val) => optional_1.Optional.of(val).filterProperty(field, fn));
     }
     map(fn) {
         return Pipeline.fromCallable(fn);
@@ -77,6 +83,9 @@ class BoundPipeline {
     }
     filter(fn) {
         return this.map((val) => optional_1.Optional.of(val).filter(fn));
+    }
+    filterProperty(field, fn) {
+        return this.map((val) => optional_1.Optional.of(val).filterProperty(field, fn));
     }
     apply() {
         return this.pipeline.apply(this.param);

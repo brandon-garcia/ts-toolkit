@@ -51,6 +51,9 @@ class Optional {
         }
         return Optional.none();
     }
+    filterProperty(field, predicate) {
+        return this.filter((v) => predicate(v[field]));
+    }
     map(fn) {
         if (this.value != null) {
             const result = fn(this.value);

@@ -3,6 +3,7 @@ import { TypeGuard } from "./types";
 interface IOptionBase<T> {
     filter<S extends T>(predicate: TypeGuard<T, S>): IOptional<S>;
     filter(predicate: Predicate<T>): IOptional<T>;
+    filterProperty<F extends keyof T>(field: F, predicate: Predicate<T[F]>): IOptional<T>;
     map<R>(fn: Fn<T, R>): IOptional<R>;
     mapToProperty<F extends keyof T>(field: F): IOptional<T[F]>;
     flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R>;
@@ -42,6 +43,7 @@ export declare class Optional<T> implements IOptional<T> {
     getValue(): T | undefined;
     mapToProperty<F extends keyof T>(field: F): IOptional<T[F]>;
     filter(predicate: Predicate<T>): IOptional<T>;
+    filterProperty<F extends keyof T>(field: F, predicate: Predicate<T[F]>): IOptional<T>;
     map<R>(fn: Fn<T, R>): IOptional<R>;
     flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R>;
     orElse(defaultVal: T): ISome<T>;
