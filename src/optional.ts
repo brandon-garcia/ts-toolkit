@@ -1,9 +1,12 @@
 import {Callback, Consumer, Fn, Predicate, Supplier} from "./fn";
+import {TypeGuard} from "./types";
 
 interface IOptionBase<T> {
   toProperty<F extends keyof T>(field: F): IOptional<T[F]>;
 
+  filter<S extends T>(predicate: TypeGuard<T, S>): IOptional<S>;
   filter(predicate: Predicate<T>): IOptional<T>;
+
   map<R>(fn: Fn<T, R>): IOptional<R>;
   flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R>;
 
