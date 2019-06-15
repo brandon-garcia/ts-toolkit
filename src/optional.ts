@@ -2,7 +2,6 @@ import {Callback, Consumer, Fn, FnUtils, Predicate, Supplier} from "./fn";
 import {NonNull, TypeGuard} from "./types";
 
 interface IOptionBase<T> {
-
   filter<S extends T>(predicate: TypeGuard<T, S>): IOptional<S>;
   filter(predicate: Predicate<T>): IOptional<T>;
 
@@ -24,18 +23,24 @@ interface ISome<T> extends IOptionBase<T> {
   isPresent(): true;
   isEmpty(): false;
   getValue(): T;
+
+  coalesce(other: IOptionBase<T>): ISome<T>
 }
 
 interface INone<T> extends IOptionBase<T> {
   isPresent(): false;
   isEmpty(): true;
   getValue(): undefined;
+
+  coalesce(other: IOptional<T>): IOptional<T>;
 }
 
 export interface IOptional<T> extends IOptionBase<T> {
   isPresent(): this is ISome<T>;
   isEmpty(): this is INone<T>
-  getValue(): T | undefined ;
+  getValue(): T | undefined;
+
+  coalesce(other: IOptional<T>): IOptional<T>;
 }
 
 export class Optional<T> implements IOptional<T> {
@@ -89,7 +94,7 @@ export class Optional<T> implements IOptional<T> {
     return this.value == null ? undefined : this.value;
   }
 
-  public mapToProperty<F extends keyof T>(field: F): IOptional<NonNull<T[F]>> {
+  public mapToProperty<F extends keyof T>(field: F): IOptional<NonNull<Required<T>[F]>> {
     return this.flatMap(FnUtils.compose(FnUtils.liftProperty(field), Optional.of));
   }
 
@@ -138,6 +143,13 @@ export class Optional<T> implements IOptional<T> {
       return this;
     }
     throw fn();
+  }
+
+  public coalesce(other: IOptional<T>): IOptional<T> {
+    if (this.isEmpty()) {
+      return other;
+    }
+    return this;
   }
 
   public ifPresent(fn: Consumer<T>): IOptional<T> {

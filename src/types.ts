@@ -2,7 +2,7 @@ import {FnUtils, Reducer} from "./fn";
 
 export type TypeGuard<KnownT, MaybeT extends KnownT> = (p: KnownT) => p is MaybeT;
 
-export type NonNull<T> = Exclude<T, null | undefined>;
+export type NonNull<T> = T extends null | undefined ? Exclude<T, null | undefined> : T;
 
 export type Fields<T> = {
   [K in keyof T]: T[K] extends Function ? never : T[K];

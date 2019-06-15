@@ -85,6 +85,12 @@ class Optional {
         }
         throw fn();
     }
+    coalesce(other) {
+        if (this.isEmpty()) {
+            return other;
+        }
+        return this;
+    }
     ifPresent(fn) {
         if (this.value != null) {
             fn(this.value);
