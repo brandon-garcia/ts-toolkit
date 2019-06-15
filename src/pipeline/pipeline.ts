@@ -31,7 +31,7 @@ export class Pipeline<T1, T2> implements IPipeline<T1, T2> {
   }
 
   public filter(fn: Predicate<T2>): IPipeline<T1, IOptional<T2>> {
-    return this.map((val: T2) => fn(val) ? Optional.of(val) : Optional.none())
+    return this.map((val) => Optional.of(val).filter(fn));
   }
 
   public apply(param: T1): T2 {
@@ -61,7 +61,7 @@ class EmptyPipeline<T> implements IPipeline<T, T> {
   }
 
   public filter(fn: Predicate<T>): IPipeline<T, IOptional<T>> {
-    return this.map((val) => fn(val) ? Optional.of(val) : Optional.none())
+    return this.map((val) => Optional.of(val).filter(fn));
   }
 
   public map<T2>(fn: Fn<T, T2>): IPipeline<T, T2> {
@@ -97,7 +97,7 @@ class BoundPipeline<T1, T2> implements IBoundPipeline<T2> {
   }
 
   public filter(fn: Predicate<T2>): IBoundPipeline<IOptional<T2>> {
-    return this.map((val) => fn(val) ? Optional.of(val) : Optional.none());
+    return this.map((val) => Optional.of(val).filter(fn));
   }
 
   public apply(): T2 {
