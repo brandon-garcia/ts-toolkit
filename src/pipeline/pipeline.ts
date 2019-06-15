@@ -4,7 +4,11 @@ import {IOptional, Optional} from "../optional";
 
 export class Pipeline<T1, T2> implements IPipeline<T1, T2> {
   public static identity<T>(): IPipeline<T, T> {
-    return new Pipeline<T, T>((param) => param);
+    return new EmptyPipeline();
+  }
+
+  public static bound<T>(param: T): IBoundPipeline<T> {
+    return new BoundPipeline(param, Pipeline.identity());
   }
 
   public static fromCallable<T1, T2>(fn: Fn<T1, T2>): IPipeline<T1, T2> {
@@ -15,10 +19,7 @@ export class Pipeline<T1, T2> implements IPipeline<T1, T2> {
   }
 
   public alsoDo(fn: Consumer<T2>): IPipeline<T1, T2> {
-    return this.map((param: T2) => {
-      fn(param);
-      return param;
-    });
+    return this.map(FnUtils.liftConsumer(fn));
   }
 
   public map<T3>(fn: Fn<T2, T3>): IPipeline<T1, T3> {
@@ -42,6 +43,32 @@ export class Pipeline<T1, T2> implements IPipeline<T1, T2> {
   }
 }
 
+class EmptyPipeline<T> implements IPipeline<T, T> {
+  public alsoDo(fn: Consumer<T>): IPipeline<T, T> {
+    return this.map(FnUtils.liftConsumer(fn));
+  }
+
+  public apply(param: T): T {
+    return param;
+  }
+
+  public bind(param: T): IBoundPipeline<T> {
+    return new BoundPipeline(param, this);
+  }
+
+  public filter(fn: Predicate<T>): IPipeline<T, IOptional<T>> {
+    return this.map((val) => fn(val) ? Optional.of(val) : Optional.none())
+  }
+
+  public map<T2>(fn: Fn<T, T2>): IPipeline<T, T2> {
+    return Pipeline.fromCallable(fn);
+  }
+
+  public toCallable(): Fn<T, T> {
+    return this.apply.bind(this);
+  }
+}
+
 class BoundPipeline<T1, T2> implements IBoundPipeline<T2> {
   public constructor(
     private readonly param: T1,
@@ -58,7 +85,7 @@ class BoundPipeline<T1, T2> implements IBoundPipeline<T2> {
   }
 
   public filter(fn: Predicate<T2>): IBoundPipeline<IOptional<T2>> {
-    return this.map((val: T2) => fn(val) ? Optional.of(val) : Optional.none());
+    return this.map((val) => fn(val) ? Optional.of(val) : Optional.none());
   }
 
   public apply(): T2 {

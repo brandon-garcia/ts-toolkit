@@ -7,16 +7,16 @@ class Pipeline {
         this.fn = fn;
     }
     static identity() {
-        return new Pipeline((param) => param);
+        return new EmptyPipeline();
+    }
+    static bound(param) {
+        return new BoundPipeline(param, Pipeline.identity());
     }
     static fromCallable(fn) {
         return new Pipeline(fn);
     }
     alsoDo(fn) {
-        return this.map((param) => {
-            fn(param);
-            return param;
-        });
+        return this.map(fn_1.FnUtils.liftConsumer(fn));
     }
     map(fn) {
         return Pipeline.fromCallable(fn_1.FnUtils.compose(this.fn, fn));
@@ -35,6 +35,26 @@ class Pipeline {
     }
 }
 exports.Pipeline = Pipeline;
+class EmptyPipeline {
+    alsoDo(fn) {
+        return this.map(fn_1.FnUtils.liftConsumer(fn));
+    }
+    apply(param) {
+        return param;
+    }
+    bind(param) {
+        return new BoundPipeline(param, this);
+    }
+    filter(fn) {
+        return this.map((val) => fn(val) ? optional_1.Optional.of(val) : optional_1.Optional.none());
+    }
+    map(fn) {
+        return Pipeline.fromCallable(fn);
+    }
+    toCallable() {
+        return this.apply.bind(this);
+    }
+}
 class BoundPipeline {
     constructor(param, pipeline) {
         this.param = param;

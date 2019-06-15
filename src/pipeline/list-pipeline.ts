@@ -64,9 +64,12 @@ class BridgeListPipeline<T1, T2, T3> implements IListPipeline<T1, T3> {
 }
 
 export class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
-
   public static identity<T>(): IListPipeline<T, T> {
-    return new ListPipeline<T, T>((param) => param);
+    return new EmptyListPipeline();
+  }
+
+  public static bound<T>(list: T[]): IBoundListPipeline<T> {
+    return new BoundListPipeline(list, ListPipeline.identity());
   }
 
   public static fromCallable<T1, T2>(fn: Fn<T1, T2>): IListPipeline<T1, T2> {
@@ -143,15 +146,15 @@ class EmptyListPipeline<T1> implements IListPipeline<T1, T1> {
   }
 
   public sort(fn: Comparator<T1>): IListPipeline<T1, T1> {
-    return this.flatMap((list: T1[]) => list.sort(fn));
+    return this.flatMap((list) => list.sort(fn));
   }
 
   public filter(fn: Predicate<T1>): IListPipeline<T1, T1> {
-    return this.flatMap((list: T1[]) => list.filter(fn));
+    return this.flatMap((list) => list.filter(fn));
   }
 
   public reduce(fn: Reducer<T1>): IPipeline<T1[], T1> {
-    return this.toPipeline().map((list: T1[]) => list.reduce(fn))
+    return this.toPipeline().map((list) => list.reduce(fn))
   }
 
   public toFirst(): IPipeline<T1[], IOptional<T1>> {
@@ -175,12 +178,7 @@ class EmptyListPipeline<T1> implements IListPipeline<T1, T1> {
   }
 }
 
-export class BoundListPipeline<T1, T2> implements IBoundListPipeline<T2> {
-
-  public static of<T>(list: T[]): IBoundListPipeline<T> {
-    return new BoundListPipeline(list, ListPipeline.identity());
-  }
-
+class BoundListPipeline<T1, T2> implements IBoundListPipeline<T2> {
   public constructor(
     private readonly list: T1[],
     private readonly pipeline: IListPipeline<T1, T2>,
