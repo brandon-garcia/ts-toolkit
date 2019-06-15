@@ -77,7 +77,7 @@ export class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
   }
 
   public static liftCallable<T1, T2>(fn: Fn<T1[], T2[]>): IListPipeline<T1, T2> {
-    return new BridgeListPipeline(fn, new EmptyListPipeline());
+    return new BridgeListPipeline(fn, ListPipeline.identity());
   }
 
   public static liftPipeline<T1, T2>(pipeline: IPipeline<T1[], T2[]>): IListPipeline<T1, T2> {
