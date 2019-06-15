@@ -26,6 +26,10 @@ export class Pipeline<T1, T2> implements IPipeline<T1, T2> {
     return Pipeline.fromCallable(FnUtils.compose(this.fn, fn));
   }
 
+  public mapToProperty<F extends keyof T2>(field: F): IPipeline<T1, T2[F]> {
+    return this.map(FnUtils.liftAccessor(field));
+  }
+
   public filter(fn: Predicate<T2>): IPipeline<T1, IOptional<T2>> {
     return this.map((val: T2) => fn(val) ? Optional.of(val) : Optional.none())
   }
@@ -64,6 +68,10 @@ class EmptyPipeline<T> implements IPipeline<T, T> {
     return Pipeline.fromCallable(fn);
   }
 
+  public mapToProperty<F extends keyof T>(field: F): IPipeline<T, T[F]> {
+    return this.map(FnUtils.liftAccessor(field));
+  }
+
   public toCallable(): Fn<T, T> {
     return this.apply.bind(this);
   }
@@ -82,6 +90,10 @@ class BoundPipeline<T1, T2> implements IBoundPipeline<T2> {
 
   public map<T3>(fn: Fn<T2, T3>): IBoundPipeline<T3> {
     return this.pipeline.map(fn).bind(this.param);
+  }
+
+  public mapToProperty<F extends keyof T2>(field: F): IBoundPipeline<T2[F]> {
+    return this.map(FnUtils.liftAccessor(field));
   }
 
   public filter(fn: Predicate<T2>): IBoundPipeline<IOptional<T2>> {

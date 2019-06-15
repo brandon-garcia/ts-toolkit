@@ -1,13 +1,13 @@
-import {Callback, Consumer, Fn, Predicate, Supplier} from "./fn";
+import {Callback, Consumer, Fn, FnUtils, Predicate, Supplier} from "./fn";
 import {TypeGuard} from "./types";
 
 interface IOptionBase<T> {
-  toProperty<F extends keyof T>(field: F): IOptional<T[F]>;
 
   filter<S extends T>(predicate: TypeGuard<T, S>): IOptional<S>;
   filter(predicate: Predicate<T>): IOptional<T>;
 
   map<R>(fn: Fn<T, R>): IOptional<R>;
+  mapToProperty<F extends keyof T>(field: F): IOptional<T[F]>;
   flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R>;
 
   orElse(defaultVal: T): ISome<T>;
@@ -87,11 +87,8 @@ export class Optional<T> implements IOptional<T> {
     return this.value == null ? undefined : this.value;
   }
 
-  public toProperty<F extends keyof T>(field: F): IOptional<T[F]> {
-    if (this.value != null) {
-      return Optional.of(this.value[field]);
-    }
-    return Optional.none();
+  public mapToProperty<F extends keyof T>(field: F): IOptional<T[F]> {
+    return this.map(FnUtils.liftAccessor(field));
   }
 
   public filter(predicate: Predicate<T>): IOptional<T> {

@@ -70,6 +70,9 @@ const liftConsumer = <T> (fn: Consumer<T>) =>
     return param;
   };
 
+const liftAccessor = <T, F extends keyof T> (field: F) =>
+  (param: T) => param[field];
+
 const matchCompose = <T, R, CaseType extends string|number|symbol> (matcher: Fn<T, CaseType>, cases: Record<CaseType, Fn<T, R>>) =>
   (param: T) => cases[ matcher(param) ](param);
 
@@ -86,5 +89,6 @@ export const FnUtils = {
   partial4,
   matchCompose,
   liftConsumer,
+  liftAccessor,
 };
 
