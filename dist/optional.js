@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const fn_1 = require("./fn");
 class Optional {
     constructor(value) {
         this.value = value;
@@ -41,11 +42,8 @@ class Optional {
     getValue() {
         return this.value == null ? undefined : this.value;
     }
-    toProperty(field) {
-        if (this.value != null) {
-            return Optional.of(this.value[field]);
-        }
-        return Optional.none();
+    mapToProperty(field) {
+        return this.map(fn_1.FnUtils.liftProperty(field));
     }
     filter(predicate) {
         if (this.value != null && predicate(this.value)) {

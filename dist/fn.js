@@ -23,6 +23,7 @@ const liftConsumer = (fn) => (param) => {
     fn(param);
     return param;
 };
+const liftProperty = (field) => (param) => param[field];
 const matchCompose = (matcher, cases) => (param) => cases[matcher(param)](param);
 exports.FnUtils = {
     bindInvoker,
@@ -37,5 +38,6 @@ exports.FnUtils = {
     partial4,
     matchCompose,
     liftConsumer,
+    liftProperty,
 };
 //# sourceMappingURL=fn.js.map

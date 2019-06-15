@@ -88,7 +88,7 @@ export class Optional<T> implements IOptional<T> {
   }
 
   public mapToProperty<F extends keyof T>(field: F): IOptional<T[F]> {
-    return this.map(FnUtils.liftAccessor(field));
+    return this.map(FnUtils.liftProperty(field));
   }
 
   public filter(predicate: Predicate<T>): IOptional<T> {

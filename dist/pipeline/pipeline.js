@@ -21,6 +21,9 @@ class Pipeline {
     map(fn) {
         return Pipeline.fromCallable(fn_1.FnUtils.compose(this.fn, fn));
     }
+    mapToProperty(field) {
+        return this.map(fn_1.FnUtils.liftProperty(field));
+    }
     filter(fn) {
         return this.map((val) => fn(val) ? optional_1.Optional.of(val) : optional_1.Optional.none());
     }
@@ -51,6 +54,9 @@ class EmptyPipeline {
     map(fn) {
         return Pipeline.fromCallable(fn);
     }
+    mapToProperty(field) {
+        return this.map(fn_1.FnUtils.liftProperty(field));
+    }
     toCallable() {
         return this.apply.bind(this);
     }
@@ -65,6 +71,9 @@ class BoundPipeline {
     }
     map(fn) {
         return this.pipeline.map(fn).bind(this.param);
+    }
+    mapToProperty(field) {
+        return this.map(fn_1.FnUtils.liftProperty(field));
     }
     filter(fn) {
         return this.map((val) => fn(val) ? optional_1.Optional.of(val) : optional_1.Optional.none());

@@ -11,6 +11,7 @@ export declare class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
     private constructor();
     alsoDo(fn: Consumer<T2>): IListPipeline<T1, T2>;
     map<T3>(fn: Fn<T2, T3>): IListPipeline<T1, T3>;
+    mapToProperty<F extends keyof T2>(field: F): IListPipeline<T1, T2[F]>;
     flatMap<T3>(fn: Fn<T2[], T3[]>): IListPipeline<T1, T3>;
     sort(fn: Comparator<T2>): IListPipeline<T1, T2>;
     filter(fn: Predicate<T2>): IListPipeline<T1, T2>;

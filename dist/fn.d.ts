@@ -35,4 +35,5 @@ export declare const FnUtils: {
     partial4: <T1, T2, T3, T4, R>(p1: T1, fn: Fn4<T1, T2, T3, T4, R>) => (p2: T2, p3: T3, p4: T4) => R;
     matchCompose: <T, R, CaseType extends string | number | symbol>(matcher: Fn<T, CaseType>, cases: Record<CaseType, Fn<T, R>>) => (param: T) => R;
     liftConsumer: <T>(fn: Fn<T, void>) => (param: T) => T;
+    liftProperty: <T, F extends keyof T>(field: F) => (param: T) => T[F];
 };

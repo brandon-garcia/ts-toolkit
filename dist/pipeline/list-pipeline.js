@@ -20,6 +20,9 @@ class BridgeListPipeline {
     map(fn) {
         return new BridgeListPipeline(this.fn, this.pipeline.map(fn));
     }
+    mapToProperty(field) {
+        return this.map(fn_1.FnUtils.liftProperty(field));
+    }
     flatMap(fn) {
         return new BridgeListPipeline(this.fn, this.pipeline.flatMap(fn));
     }
@@ -73,6 +76,9 @@ class ListPipeline {
     map(fn) {
         return new ListPipeline(fn_1.FnUtils.compose(this.fn, fn));
     }
+    mapToProperty(field) {
+        return this.map(fn_1.FnUtils.liftProperty(field));
+    }
     flatMap(fn) {
         return new BridgeListPipeline(this.toCallable(), ListPipeline.liftCallable(fn));
     }
@@ -108,6 +114,9 @@ class EmptyListPipeline {
     }
     map(fn) {
         return ListPipeline.fromCallable(fn);
+    }
+    mapToProperty(field) {
+        return this.map(fn_1.FnUtils.liftProperty(field));
     }
     flatMap(fn) {
         return ListPipeline.liftCallable(fn);
@@ -147,6 +156,9 @@ class BoundListPipeline {
     }
     map(fn) {
         return this.pipeline.map(fn).bind(this.list);
+    }
+    mapToProperty(field) {
+        return this.map(fn_1.FnUtils.liftProperty(field));
     }
     flatMap(fn) {
         return this.pipeline.flatMap(fn).bind(this.list);

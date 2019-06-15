@@ -1,10 +1,10 @@
 import { Callback, Consumer, Fn, Predicate, Supplier } from "./fn";
 import { TypeGuard } from "./types";
 interface IOptionBase<T> {
-    toProperty<F extends keyof T>(field: F): IOptional<T[F]>;
     filter<S extends T>(predicate: TypeGuard<T, S>): IOptional<S>;
     filter(predicate: Predicate<T>): IOptional<T>;
     map<R>(fn: Fn<T, R>): IOptional<R>;
+    mapToProperty<F extends keyof T>(field: F): IOptional<T[F]>;
     flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R>;
     orElse(defaultVal: T): ISome<T>;
     orElseGet(fn: Supplier<T>): ISome<T>;
@@ -40,7 +40,7 @@ export declare class Optional<T> implements IOptional<T> {
     isPresent(): this is ISome<T>;
     isEmpty(): this is INone<T>;
     getValue(): T | undefined;
-    toProperty<F extends keyof T>(field: F): IOptional<T[F]>;
+    mapToProperty<F extends keyof T>(field: F): IOptional<T[F]>;
     filter(predicate: Predicate<T>): IOptional<T>;
     map<R>(fn: Fn<T, R>): IOptional<R>;
     flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R>;

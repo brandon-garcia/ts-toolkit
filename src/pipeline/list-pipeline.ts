@@ -27,7 +27,7 @@ class BridgeListPipeline<T1, T2, T3> implements IListPipeline<T1, T3> {
   }
 
   public mapToProperty<F extends keyof T3>(field: F): IListPipeline<T1, T3[F]> {
-    return this.map(FnUtils.liftAccessor(field));
+    return this.map(FnUtils.liftProperty(field));
   }
 
   public flatMap<T4>(fn: Fn<T3[], T4[]>): IListPipeline<T1, T4> {
@@ -100,7 +100,7 @@ export class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
   }
 
   public mapToProperty<F extends keyof T2>(field: F): IListPipeline<T1, T2[F]> {
-    return this.map(FnUtils.liftAccessor(field));
+    return this.map(FnUtils.liftProperty(field));
   }
 
   public flatMap<T3>(fn: Fn<T2[], T3[]>): IListPipeline<T1, T3> {
@@ -150,7 +150,7 @@ class EmptyListPipeline<T1> implements IListPipeline<T1, T1> {
   }
 
   public mapToProperty<F extends keyof T1>(field: F): IListPipeline<T1, T1[F]> {
-    return this.map(FnUtils.liftAccessor(field));
+    return this.map(FnUtils.liftProperty(field));
   }
 
   public flatMap<T2>(fn: Fn<T1[], T2[]>): IListPipeline<T1, T2> {
@@ -206,7 +206,7 @@ class BoundListPipeline<T1, T2> implements IBoundListPipeline<T2> {
   }
 
   public mapToProperty<F extends keyof T2>(field: F): IBoundListPipeline<T2[F]> {
-    return this.map(FnUtils.liftAccessor(field));
+    return this.map(FnUtils.liftProperty(field));
   }
 
   public flatMap<T3>(fn: Fn<T2[], T3[]>): IBoundListPipeline<T3> {
