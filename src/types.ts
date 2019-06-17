@@ -27,7 +27,7 @@ const validateOptionalField = <T extends any, FName extends string, FType> (
   field: FName,
   validator: TypeGuard<unknown, FType>,
 ): obj is T & Partial<Record<FName, FType>> =>
-  !(field in obj) || validator(obj[field]);
+  !(field in obj) || obj[field] == null || validator(obj[field]);
 
 const isNumber = <T> (v: T): v is T & number =>
   typeof v === "number";

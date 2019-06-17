@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const fn_1 = require("./fn");
 const hasField = (obj, field, validator) => field in obj && validator(obj[field]);
-const validateOptionalField = (obj, field, validator) => !(field in obj) || validator(obj[field]);
+const validateOptionalField = (obj, field, validator) => !(field in obj) || obj[field] == null || validator(obj[field]);
 const isNumber = (v) => typeof v === "number";
 const isString = (v) => typeof v === "string";
 const isObject = (v) => typeof v === "object";
