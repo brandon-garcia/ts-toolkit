@@ -15,6 +15,10 @@ export type Methods<T> = {
 export type FieldNames<T> = Fields<T>[keyof T];
 export type MethodNames<T> = Methods<T>[keyof T];
 
+export type DeepReadonly<T> =  T extends object ? {
+  readonly [P in keyof T]: DeepReadonly<T[P]>;
+} : T;
+
 const hasField = <T extends any, FName extends string, FType> (
   obj: T,
   field: FName,

@@ -1,3 +1,5 @@
+import {IOptional, Optional} from "./optional";
+
 export type Fn0<R> = () => R;
 export type Fn<P1, R> = (p1: P1) => R;
 export type Fn2<P1, P2, R> = (p1: P1, p2: P2) => R;
@@ -76,19 +78,23 @@ const liftProperty = <T, F extends keyof T> (field: F) =>
 const matchCompose = <T, R, CaseType extends string|number|symbol> (matcher: Fn<T, CaseType>, cases: Record<CaseType, Fn<T, R>>) =>
   (param: T) => cases[ matcher(param) ](param);
 
+const liftOptional = <T, R> (fn: Fn<T, R| null | undefined>): Fn<T, IOptional<R>> =>
+  (param: T) => Optional.of(fn(param));
+
 export const FnUtils = {
   bindInvoker,
   compose,
   doAfter,
   doBefore,
   ifElse,
+  liftConsumer,
+  liftOptional,
+  liftProperty,
   makeBatchReducer,
+  matchCompose,
   partial1,
   partial2,
   partial3,
   partial4,
-  matchCompose,
-  liftConsumer,
-  liftProperty,
 };
 
