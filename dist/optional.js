@@ -26,9 +26,9 @@ class Optional {
             .map((maybeItem) => maybeItem.getValue());
     }
     static coalesce(list) {
-        for (let i = 0; i < list.length; ++i) {
-            if (list[i].isPresent()) {
-                return list[i];
+        for (const item of list) {
+            if (item.isPresent()) {
+                return item;
             }
         }
         return Optional.none();
@@ -56,8 +56,7 @@ class Optional {
     }
     map(fn) {
         if (this.value != null) {
-            const result = fn(this.value);
-            return Optional.of(result);
+            return Optional.of(fn(this.value));
         }
         return Optional.none();
     }
