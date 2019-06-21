@@ -78,7 +78,7 @@ const liftProperty = <T, F extends keyof T> (field: F) =>
 const matchCompose = <T, R, CaseType extends string|number|symbol> (matcher: Fn<T, CaseType>, cases: Record<CaseType, Fn<T, R>>) =>
   (param: T) => cases[ matcher(param) ](param);
 
-const liftOptional = <T, R> (fn: Fn<T, R| null | undefined>): Fn<T, IOptional<R>> =>
+const liftNullable = <T, R> (fn: Fn<T, R| null | undefined>): Fn<T, IOptional<R>> =>
   (param: T) => Optional.of(fn(param));
 
 export const FnUtils = {
@@ -88,7 +88,7 @@ export const FnUtils = {
   doBefore,
   ifElse,
   liftConsumer,
-  liftOptional,
+  liftNullable,
   liftProperty,
   makeBatchReducer,
   matchCompose,

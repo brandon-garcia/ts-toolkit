@@ -74,9 +74,9 @@ export class Optional<T> implements IOptional<T> {
   }
 
   public static coalesce<T>(list: Array<IOptional<T>>): IOptional<T> {
-    for (let i = 0; i < list.length; ++i) {
-      if (list[i].isPresent()) {
-        return list[i];
+    for (const item of list) {
+      if (item.isPresent()) {
+        return item;
       }
     }
     return Optional.none<T>();
@@ -111,8 +111,7 @@ export class Optional<T> implements IOptional<T> {
 
   public map<R>(fn: Fn<T, R>): IOptional<NonNull<R>> {
     if (this.value != null) {
-      const result = fn(this.value);
-      return Optional.of(result);
+      return Optional.of( fn(this.value) );
     }
     return Optional.none<R>();
   }
