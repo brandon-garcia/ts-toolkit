@@ -4,6 +4,7 @@ function __export(m) {
 }
 Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./applicator"));
+__export(require("./either"));
 __export(require("./fn"));
 __export(require("./list"));
 __export(require("./null"));
