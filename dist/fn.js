@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const optional_1 = require("./optional");
+const either_1 = require("./either");
 const bindInvoker = (val) => (fn) => fn(val);
 const ifElse = (expr, onTrue, onFalse) => expr ? onTrue() : onFalse();
 const compose = (first, second) => (param) => second(first(param));
@@ -27,6 +28,16 @@ const liftConsumer = (fn) => (param) => {
 const liftProperty = (field) => (param) => param[field];
 const matchCompose = (matcher, cases) => (param) => cases[matcher(param)](param);
 const liftNullable = (fn) => (param) => optional_1.Optional.of(fn(param));
+const liftTry = (fn) => (param) => {
+    let result;
+    try {
+        result = fn(param);
+    }
+    catch (err) {
+        return either_1.Either.error(err);
+    }
+    return either_1.Either.success(result);
+};
 exports.FnUtils = {
     bindInvoker,
     compose,
@@ -42,5 +53,6 @@ exports.FnUtils = {
     partial2,
     partial3,
     partial4,
+    liftTry,
 };
 //# sourceMappingURL=fn.js.map

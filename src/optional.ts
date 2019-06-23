@@ -1,5 +1,6 @@
 import {Callback, Consumer, Fn, FnUtils, Predicate, Supplier} from "./fn";
 import {NonNull, TypeGuard} from "./types";
+import {IEither} from "./either";
 
 interface IOptionBase<T> {
   filter<S extends T>(predicate: TypeGuard<T, S>): IOptional<S>;
@@ -8,6 +9,7 @@ interface IOptionBase<T> {
   filterProperty<F extends keyof T>(field: F, predicate: Predicate<T[F]>): IOptional<T>;
 
   map<R>(fn: Fn<T, R>): IOptional<NonNull<R>>;
+  try<R, E>(fn: Fn<T, R>): IOptional<IEither<R, E>>
   mapToProperty<F extends keyof T>(field: F): IOptional<NonNull<T[F]>>;
   flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R>;
 
@@ -142,6 +144,10 @@ export class Optional<T> implements IOptional<T> {
       return this;
     }
     throw fn();
+  }
+
+  public try<R, E>(fn: Fn<T, R>): IOptional<IEither<R, E>> {
+    return this.map(FnUtils.liftTry(fn))
   }
 
   public coalesce(other: IOptional<T>): IOptional<T> {

@@ -84,6 +84,9 @@ class Optional {
         }
         throw fn();
     }
+    try(fn) {
+        return this.map(fn_1.FnUtils.liftTry(fn));
+    }
     coalesce(other) {
         if (this.isEmpty()) {
             return other;

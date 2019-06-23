@@ -1,10 +1,12 @@
 import { Callback, Consumer, Fn, Predicate, Supplier } from "./fn";
 import { NonNull, TypeGuard } from "./types";
+import { IEither } from "./either";
 interface IOptionBase<T> {
     filter<S extends T>(predicate: TypeGuard<T, S>): IOptional<S>;
     filter(predicate: Predicate<T>): IOptional<T>;
     filterProperty<F extends keyof T>(field: F, predicate: Predicate<T[F]>): IOptional<T>;
     map<R>(fn: Fn<T, R>): IOptional<NonNull<R>>;
+    try<R, E>(fn: Fn<T, R>): IOptional<IEither<R, E>>;
     mapToProperty<F extends keyof T>(field: F): IOptional<NonNull<T[F]>>;
     flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R>;
     orElse(defaultVal: T): ISome<T>;
@@ -52,6 +54,7 @@ export declare class Optional<T> implements IOptional<T> {
     orElse(defaultVal: NonNull<T>): ISome<T>;
     orElseGet(fn: Supplier<NonNull<T>>): ISome<T>;
     orElseThrow<E extends Error>(fn: Supplier<NonNull<E>>): ISome<T> | never;
+    try<R, E>(fn: Fn<T, R>): IOptional<IEither<R, E>>;
     coalesce(other: IOptional<T>): IOptional<T>;
     ifPresent(fn: Consumer<T>): IOptional<T>;
     ifEmpty(fn: Callback): IOptional<T>;

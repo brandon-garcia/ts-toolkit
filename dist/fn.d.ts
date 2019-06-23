@@ -1,4 +1,5 @@
 import { IOptional } from "./optional";
+import { IEither } from "./either";
 export declare type Fn0<R> = () => R;
 export declare type Fn<P1, R> = (p1: P1) => R;
 export declare type Fn2<P1, P2, R> = (p1: P1, p2: P2) => R;
@@ -38,4 +39,5 @@ export declare const FnUtils: {
     partial2: <T1, T2, R>(p1: T1, fn: Fn2<T1, T2, R>) => (p2: T2) => R;
     partial3: <T1, T2, T3, R>(p1: T1, fn: Fn3<T1, T2, T3, R>) => (p2: T2, p3: T3) => R;
     partial4: <T1, T2, T3, T4, R>(p1: T1, fn: Fn4<T1, T2, T3, T4, R>) => (p2: T2, p3: T3, p4: T4) => R;
+    liftTry: <T, R, E>(fn: Fn<T, R>) => Fn<T, IEither<R, E>>;
 };
