@@ -5,7 +5,7 @@ const hasField = (obj, field, validator) => field in obj && validator(obj[field]
 const validateOptionalField = (obj, field, validator) => !(field in obj) || obj[field] == null || validator(obj[field]);
 const isNumber = (v) => typeof v === "number";
 const isString = (v) => typeof v === "string";
-const isObject = (v) => typeof v === "object";
+const isObject = (v) => v != null && typeof v === "object";
 const isBoolean = (v) => typeof v === "boolean";
 const isNonNull = (v) => v != null;
 const isNull = (v) => v === null;

@@ -40,7 +40,7 @@ const isString = <T> (v: T): v is T & string =>
   typeof v === "string";
 
 const isObject = <T> (v: T): v is T & object =>
-  typeof v === "object";
+  v != null && typeof v === "object";
 
 const isBoolean = <T> (v: T): v is T & boolean =>
   typeof v === "boolean";
