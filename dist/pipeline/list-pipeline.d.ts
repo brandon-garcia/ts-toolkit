@@ -1,8 +1,8 @@
 import { Comparator, Consumer, Fn, Predicate, Reducer } from "../fn";
-import { IOptional } from "../optional";
+import { IOptional } from "../optional/interface";
 import { IBoundListPipeline, IListPipeline, IPipeline } from "./interface";
 export declare class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
-    private readonly fn;
+    private fn;
     static identity<T>(): IListPipeline<T, T>;
     static bound<T>(list: T[]): IBoundListPipeline<T>;
     static fromCallable<T1, T2>(fn: Fn<T1, T2>): IListPipeline<T1, T2>;

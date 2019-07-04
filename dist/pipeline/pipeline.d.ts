@@ -2,7 +2,7 @@ import { Consumer, Fn, Predicate } from "../fn";
 import { IBoundPipeline, IPipeline } from "./interface";
 import { IOptional } from "../optional";
 export declare class Pipeline<T1, T2> implements IPipeline<T1, T2> {
-    private readonly fn;
+    private fn;
     static identity<T>(): IPipeline<T, T>;
     static bound<T>(param: T): IBoundPipeline<T>;
     static fromCallable<T1, T2>(fn: Fn<T1, T2>): IPipeline<T1, T2>;

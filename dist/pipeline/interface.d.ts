@@ -1,6 +1,6 @@
-import { Comparator, Consumer, Fn, Predicate, Reducer, Supplier } from "../fn";
-import { IOptional } from "../optional";
-import { TypeGuard } from "../types";
+import { Comparator, Consumer, Fn, Predicate, Reducer, Supplier } from "../fn/interface";
+import { IOptional } from "../optional/interface";
+import { TypeGuard } from "../types/interface";
 export interface IPipeline<T1, T2> {
     alsoDo(fn: Consumer<T2>): IPipeline<T1, T2>;
     map<T3>(fn: Fn<T2, T3>): IPipeline<T1, T3>;

@@ -1,0 +1,20 @@
+import { IOptional } from "../optional";
+import { IEither } from "../either";
+import { Fn, Fn2, Fn3, Fn4 } from "./interface";
+export declare const FnUtils: {
+    bindInvoker: <T, R>(val: T) => (fn: Fn<T, R>) => R;
+    compose: <T1, T2, T3>(first: Fn<T1, T2>, second: Fn<T2, T3>) => Fn<T1, T3>;
+    doAfter: <F extends (...args: any[]) => any>(fn: F, op: (retval: ReturnType<F>) => void) => (...args: Parameters<F>) => ReturnType<F>;
+    doBefore: <F extends (...args: any[]) => any>(fn: F, op: (...args: Parameters<F>) => void) => (...args: Parameters<F>) => ReturnType<F>;
+    ifElse: <R>(expr: boolean, onTrue: import("./interface").Fn0<R>, onFalse: import("./interface").Fn0<R>) => R;
+    liftConsumer: <T>(fn: Fn<T, void>) => (param: T) => T;
+    liftNullable: <T, R>(fn: Fn<T, R | null | undefined>) => Fn<T, IOptional<R>>;
+    liftProperty: <T, F extends keyof T>(field: F) => (param: T) => T[F];
+    makeBatchReducer: <T, R>(reducer: Fn2<R, R, R>, operations: Fn<T, R>[]) => Fn<T, R>;
+    matchCompose: <T, R, CaseType extends string | number | symbol>(matcher: Fn<T, CaseType>, cases: Record<CaseType, Fn<T, R>>) => (param: T) => R;
+    partial1: <T1, R>(p1: T1, fn: Fn<T1, R>) => () => R;
+    partial2: <T1, T2, R>(p1: T1, fn: Fn2<T1, T2, R>) => (p2: T2) => R;
+    partial3: <T1, T2, T3, R>(p1: T1, fn: Fn3<T1, T2, T3, R>) => (p2: T2, p3: T3) => R;
+    partial4: <T1, T2, T3, T4, R>(p1: T1, fn: Fn4<T1, T2, T3, T4, R>) => (p2: T2, p3: T3, p4: T4) => R;
+    liftTry: <T, R, E>(fn: Fn<T, R>) => Fn<T, IEither<R, E>>;
+};
