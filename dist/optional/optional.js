@@ -1,111 +1,113 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const fn_1 = require("../fn");
-class Optional {
-    constructor(value) {
+var fn_1 = require("../fn");
+var Optional = (function () {
+    function Optional(value) {
         this.value = value;
     }
-    static of(value) {
+    Optional.of = function (value) {
         return new Optional(value);
-    }
-    static some(value) {
+    };
+    Optional.some = function (value) {
         return Optional.of(value);
-    }
-    static none() {
+    };
+    Optional.none = function () {
         return Optional.of();
-    }
-    static liftList(list) {
+    };
+    Optional.liftList = function (list) {
         return Optional.some(Optional.unboxList(list));
-    }
-    static flatten(value) {
+    };
+    Optional.flatten = function (value) {
         return value.orElseGet(Optional.none).getValue();
-    }
-    static unboxList(list) {
+    };
+    Optional.unboxList = function (list) {
         return list
-            .filter((maybeItem) => maybeItem.isPresent())
-            .map((maybeItem) => maybeItem.getValue());
-    }
-    static coalesce(list) {
-        for (const item of list) {
+            .filter(function (maybeItem) { return maybeItem.isPresent(); })
+            .map(function (maybeItem) { return maybeItem.getValue(); });
+    };
+    Optional.coalesce = function (list) {
+        for (var _i = 0, list_1 = list; _i < list_1.length; _i++) {
+            var item = list_1[_i];
             if (item.isPresent()) {
                 return item;
             }
         }
         return Optional.none();
-    }
-    isPresent() {
+    };
+    Optional.prototype.isPresent = function () {
         return this.value != null;
-    }
-    isEmpty() {
+    };
+    Optional.prototype.isEmpty = function () {
         return !this.isPresent();
-    }
-    getValue() {
+    };
+    Optional.prototype.getValue = function () {
         return this.value == null ? undefined : this.value;
-    }
-    mapToProperty(field) {
+    };
+    Optional.prototype.mapToProperty = function (field) {
         return this.flatMap(fn_1.FnUtils.compose(fn_1.FnUtils.liftProperty(field), Optional.of));
-    }
-    filter(predicate) {
+    };
+    Optional.prototype.filter = function (predicate) {
         if (this.value != null && predicate(this.value)) {
             return this;
         }
         this.value = null;
         return this;
-    }
-    filterProperty(field, predicate) {
-        return this.filter((val) => val[field] != null ? predicate(val[field]) : false);
-    }
-    map(fn) {
+    };
+    Optional.prototype.filterProperty = function (field, predicate) {
+        return this.filter(function (val) { return val[field] != null ? predicate(val[field]) : false; });
+    };
+    Optional.prototype.map = function (fn) {
         if (this.value != null) {
             this.value = fn(this.value);
         }
         return this;
-    }
-    flatMap(fn) {
+    };
+    Optional.prototype.flatMap = function (fn) {
         if (this.value != null) {
             return fn(this.value);
         }
         return this;
-    }
-    orElse(defaultVal) {
+    };
+    Optional.prototype.orElse = function (defaultVal) {
         if (this.isEmpty()) {
             this.value = defaultVal;
         }
         return this;
-    }
-    orElseGet(fn) {
+    };
+    Optional.prototype.orElseGet = function (fn) {
         if (this.isEmpty()) {
             this.value = fn();
         }
         return this;
-    }
-    orElseThrow(fn) {
+    };
+    Optional.prototype.orElseThrow = function (fn) {
         if (this.isPresent()) {
             return this;
         }
         throw fn();
-    }
-    try(fn) {
+    };
+    Optional.prototype.try = function (fn) {
         return this.map(fn_1.FnUtils.liftTry(fn));
-    }
-    coalesce(other) {
+    };
+    Optional.prototype.coalesce = function (other) {
         if (this.isEmpty()) {
             return other;
         }
         return this;
-    }
-    ifPresent(fn) {
+    };
+    Optional.prototype.ifPresent = function (fn) {
         if (this.value != null) {
             fn(this.value);
         }
         return this;
-    }
-    ifEmpty(fn) {
+    };
+    Optional.prototype.ifEmpty = function (fn) {
         if (this.value == null) {
             fn();
         }
         return this;
-    }
-}
+    };
+    return Optional;
+}());
 exports.Optional = Optional;
 //# sourceMappingURL=optional.js.map

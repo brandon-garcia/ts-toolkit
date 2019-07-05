@@ -1,17 +1,17 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.NumberReducers = {
-    max: (first, second) => Math.max(first, second),
-    min: (first, second) => Math.min(first, second),
-    sum: (first, second) => first + second,
-    product: (first, second) => first * second,
+    max: function (first, second) { return Math.max(first, second); },
+    min: function (first, second) { return Math.min(first, second); },
+    sum: function (first, second) { return first + second; },
+    product: function (first, second) { return first * second; },
 };
 exports.BoolReducers = {
-    and: (first, second) => first && second,
-    or: (first, second) => first || second,
+    and: function (first, second) { return first && second; },
+    or: function (first, second) { return first || second; },
 };
 exports.StringReducers = {
-    makeConcatReducer: (separator) => (first, second) => first + separator + second,
-    concat: (first, second) => first + second,
+    makeConcatReducer: function (separator) { return function (first, second) { return first + separator + second; }; },
+    concat: function (first, second) { return first + second; },
 };
 //# sourceMappingURL=reductions.js.map

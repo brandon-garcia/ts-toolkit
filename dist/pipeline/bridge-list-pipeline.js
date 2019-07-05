@@ -1,53 +1,54 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const fn_1 = require("../fn");
-const pipeline_1 = require("./pipeline");
-const bound_list_pipeline_1 = require("./bound-list-pipeline");
-const list_1 = require("../list");
-class BridgeListPipeline {
-    constructor(fn, pipeline) {
+var fn_1 = require("../fn");
+var pipeline_1 = require("./pipeline");
+var bound_list_pipeline_1 = require("./bound-list-pipeline");
+var list_1 = require("../list");
+var BridgeListPipeline = (function () {
+    function BridgeListPipeline(fn, pipeline) {
         this.fn = fn;
         this.pipeline = pipeline;
     }
-    alsoDo(fn) {
+    BridgeListPipeline.prototype.alsoDo = function (fn) {
         return this.map(fn_1.FnUtils.liftConsumer(fn));
-    }
-    map(fn) {
+    };
+    BridgeListPipeline.prototype.map = function (fn) {
         return new BridgeListPipeline(this.fn, this.pipeline.map(fn));
-    }
-    mapToProperty(field) {
+    };
+    BridgeListPipeline.prototype.mapToProperty = function (field) {
         return this.map(fn_1.FnUtils.liftProperty(field));
-    }
-    flatMap(fn) {
+    };
+    BridgeListPipeline.prototype.flatMap = function (fn) {
         return new BridgeListPipeline(this.fn, this.pipeline.flatMap(fn));
-    }
-    sort(fn) {
+    };
+    BridgeListPipeline.prototype.sort = function (fn) {
         return new BridgeListPipeline(this.fn, this.pipeline.sort(fn));
-    }
-    filter(fn) {
+    };
+    BridgeListPipeline.prototype.filter = function (fn) {
         return new BridgeListPipeline(this.fn, this.pipeline.filter(fn));
-    }
-    filterProperty(field, fn) {
+    };
+    BridgeListPipeline.prototype.filterProperty = function (field, fn) {
         return new BridgeListPipeline(this.fn, this.pipeline.filterProperty(field, fn));
-    }
-    reduce(fn) {
-        return this.toPipeline().map((list) => list.reduce(fn));
-    }
-    toFirst() {
+    };
+    BridgeListPipeline.prototype.reduce = function (fn) {
+        return this.toPipeline().map(function (list) { return list.reduce(fn); });
+    };
+    BridgeListPipeline.prototype.toFirst = function () {
         return this.toPipeline().map(list_1.ListUtils.getFirst);
-    }
-    apply(list) {
+    };
+    BridgeListPipeline.prototype.apply = function (list) {
         return this.pipeline.apply(this.fn(list));
-    }
-    bind(list) {
+    };
+    BridgeListPipeline.prototype.bind = function (list) {
         return new bound_list_pipeline_1.BoundListPipeline(list, this);
-    }
-    toCallable() {
+    };
+    BridgeListPipeline.prototype.toCallable = function () {
         return this.apply.bind(this);
-    }
-    toPipeline() {
+    };
+    BridgeListPipeline.prototype.toPipeline = function () {
         return pipeline_1.Pipeline.fromCallable(this.toCallable());
-    }
-}
+    };
+    return BridgeListPipeline;
+}());
 exports.BridgeListPipeline = BridgeListPipeline;
 //# sourceMappingURL=bridge-list-pipeline.js.map

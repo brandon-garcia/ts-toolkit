@@ -1,49 +1,50 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const fn_1 = require("../fn");
-class BoundListPipeline {
-    constructor(list, pipeline) {
+var fn_1 = require("../fn");
+var BoundListPipeline = (function () {
+    function BoundListPipeline(list, pipeline) {
         this.list = list;
         this.pipeline = pipeline;
     }
-    alsoDo(fn) {
+    BoundListPipeline.prototype.alsoDo = function (fn) {
         this.pipeline = this.pipeline.alsoDo(fn);
         return this;
-    }
-    map(fn) {
+    };
+    BoundListPipeline.prototype.map = function (fn) {
         this.pipeline = this.pipeline.map(fn);
         return this;
-    }
-    mapToProperty(field) {
+    };
+    BoundListPipeline.prototype.mapToProperty = function (field) {
         return this.map(fn_1.FnUtils.liftProperty(field));
-    }
-    flatMap(fn) {
+    };
+    BoundListPipeline.prototype.flatMap = function (fn) {
         return this.pipeline.flatMap(fn).bind(this.list);
-    }
-    sort(fn) {
+    };
+    BoundListPipeline.prototype.sort = function (fn) {
         return this.pipeline.sort(fn).bind(this.list);
-    }
-    filter(fn) {
+    };
+    BoundListPipeline.prototype.filter = function (fn) {
         return this.pipeline.filter(fn).bind(this.list);
-    }
-    filterProperty(field, fn) {
+    };
+    BoundListPipeline.prototype.filterProperty = function (field, fn) {
         return this.pipeline.filterProperty(field, fn).bind(this.list);
-    }
-    reduce(fn) {
+    };
+    BoundListPipeline.prototype.reduce = function (fn) {
         return this.pipeline.reduce(fn).bind(this.list);
-    }
-    toFirst() {
+    };
+    BoundListPipeline.prototype.toFirst = function () {
         return this.pipeline.toFirst().bind(this.list);
-    }
-    apply() {
+    };
+    BoundListPipeline.prototype.apply = function () {
         return this.pipeline.apply(this.list);
-    }
-    toCallable() {
+    };
+    BoundListPipeline.prototype.toCallable = function () {
         return this.apply.bind(this);
-    }
-    toPipeline() {
+    };
+    BoundListPipeline.prototype.toPipeline = function () {
         return this.pipeline.toPipeline().bind(this.list);
-    }
-}
+    };
+    return BoundListPipeline;
+}());
 exports.BoundListPipeline = BoundListPipeline;
 //# sourceMappingURL=bound-list-pipeline.js.map

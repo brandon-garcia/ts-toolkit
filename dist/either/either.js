@@ -1,53 +1,54 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const fn_1 = require("../fn");
-class Either {
-    constructor(flag, data) {
+var fn_1 = require("../fn");
+var Either = (function () {
+    function Either(flag, data) {
         this.flag = flag;
         this.data = data;
     }
-    static success(data) {
+    Either.success = function (data) {
         return new Either(true, data);
-    }
-    static error(error) {
+    };
+    Either.error = function (error) {
         return new Either(false, error);
-    }
-    isSuccess() {
+    };
+    Either.prototype.isSuccess = function () {
         return this.flag;
-    }
-    isError() {
+    };
+    Either.prototype.isError = function () {
         return !this.flag;
-    }
-    getValue() {
+    };
+    Either.prototype.getValue = function () {
         return this.data;
-    }
-    ifError(consumer) {
+    };
+    Either.prototype.ifError = function (consumer) {
         if (!this.flag) {
             consumer(this.data);
         }
         return this;
-    }
-    ifSuccess(consumer) {
+    };
+    Either.prototype.ifSuccess = function (consumer) {
         if (this.flag) {
             consumer(this.data);
         }
         return this;
-    }
-    try(fn) {
+    };
+    Either.prototype.try = function (fn) {
         return this.flatMap(fn_1.FnUtils.liftTry(fn));
-    }
-    flatMap(fn) {
+    };
+    Either.prototype.flatMap = function (fn) {
         if (this.flag) {
             return fn(this.data);
         }
         return this;
-    }
-    map(fn) {
+    };
+    Either.prototype.map = function (fn) {
         if (this.flag) {
             this.data = fn(this.data);
         }
         return this;
-    }
-}
+    };
+    return Either;
+}());
 exports.Either = Either;
 //# sourceMappingURL=either.js.map
