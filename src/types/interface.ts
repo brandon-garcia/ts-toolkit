@@ -1,5 +1,6 @@
 
 export type TypeGuard<KnownT, MaybeT extends KnownT> = (p: KnownT) => p is MaybeT;
+export type TypeGuardType<TG extends TypeGuard<unknown, unknown>> = TG extends TypeGuard<unknown, infer T> ? T : never;
 
 export type NonNull<T> = T extends null | undefined ? Exclude<T, null | undefined> : T;
 
