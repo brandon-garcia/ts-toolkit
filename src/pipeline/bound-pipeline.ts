@@ -1,6 +1,5 @@
 import {IBoundPipeline, IPipeline} from "./interface";
-import {Consumer, Fn, FnUtils, Predicate, Supplier} from "../fn";
-import {IOptional, Optional} from "../optional";
+import {Consumer, Fn, FnUtils, Supplier} from "../fn";
 
 export class BoundPipeline<T1, T2> implements IBoundPipeline<T2> {
   public constructor(
@@ -21,14 +20,6 @@ export class BoundPipeline<T1, T2> implements IBoundPipeline<T2> {
 
   public mapToProperty<F extends keyof T2>(field: F): IBoundPipeline<T2[F]> {
     return this.map(FnUtils.liftProperty(field));
-  }
-
-  public filter(fn: Predicate<T2>): IBoundPipeline<IOptional<T2>> {
-    return this.map((val) => Optional.of(val).filter(fn));
-  }
-
-  public filterProperty<F extends keyof T2>(field: F, fn: Predicate<T2[F]>): IBoundPipeline<IOptional<T2>> {
-    return this.map((val) => Optional.of(val).filterProperty(field, fn));
   }
 
   public apply(): T2 {
