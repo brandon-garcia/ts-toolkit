@@ -67,6 +67,12 @@ const liftTry = <T, R, E> (fn: Fn<T, R>): Fn<T, IEither<R, E>> =>
     return Either.success<R, E>(result);
   };
 
+const partialFactory = <T extends object, Provided extends Partial<T>> (common: Provided) =>
+  (remaining: Exclude<T, Provided>): T => ({
+    ...common,
+    ...remaining,
+  });
+
 export const FnUtils = {
   bindInvoker,
   compose,
@@ -83,5 +89,6 @@ export const FnUtils = {
   partial3,
   partial4,
   liftTry,
+  partialFactory,
 };
 
