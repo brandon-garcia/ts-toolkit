@@ -1,5 +1,5 @@
 import {Callback, Consumer, Fn, Predicate, Supplier} from "../fn/interface";
-import {NonNull, TypeGuard} from "../types/interface";
+import {TypeGuard} from "../types/interface";
 import {IEither} from "../either/interface";
 
 export interface IOptionalBase<T> {
@@ -8,9 +8,9 @@ export interface IOptionalBase<T> {
 
   filterProperty<F extends keyof T>(field: F, predicate: Predicate<T[F]>): IOptional<T>;
 
-  map<R>(fn: Fn<T, R>): IOptional<NonNull<R>>;
+  map<R>(fn: Fn<T, R>): IOptional<NonNullable<R>>;
   try<R, E>(fn: Fn<T, R>): IOptional<IEither<R, E>>
-  mapToProperty<F extends keyof T>(field: F): IOptional<NonNull<T[F]>>;
+  mapToProperty<F extends keyof T>(field: F): IOptional<NonNullable<T[F]>>;
   flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R>;
 
   orElse(defaultVal: T): ISome<T>;
@@ -21,7 +21,7 @@ export interface IOptionalBase<T> {
   ifEmpty(fn: Callback): IOptional<T>;
 }
 
-export interface ISome<T> extends IOptionalBase<T> {
+export interface ISome<T extends NonNullable<unknown>> extends IOptionalBase<T> {
   isPresent(): true;
   isEmpty(): false;
   getValue(): T;
@@ -34,6 +34,8 @@ export interface INone<T> extends IOptionalBase<T> {
   isEmpty(): true;
   getValue(): undefined;
 
+  coalesce(other: ISome<T>): ISome<T>;
+  coalesce(other: INone<T>): INone<T>;
   coalesce(other: IOptional<T>): IOptional<T>;
 }
 
@@ -42,6 +44,7 @@ export interface IOptional<T> extends IOptionalBase<T> {
   isEmpty(): this is INone<T>
   getValue(): T | undefined;
 
+  coalesce(other: ISome<T>): ISome<T>;
   coalesce(other: IOptional<T>): IOptional<T>;
 }
 

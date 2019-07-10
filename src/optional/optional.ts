@@ -1,22 +1,21 @@
 import {Callback, Consumer, Fn, FnUtils, Predicate, Supplier} from "../fn";
-import {NonNull} from "../types/interface";
 import {IEither} from "../either/interface";
 import {INone, IOptional, ISome} from "./interface";
 
-export class Optional<T> implements IOptional<T> {
+export class Optional<T extends NonNullable<unknown>> implements IOptional<T> {
   private constructor(private value: T | null | undefined) {
   }
 
-  public static of<T>(value?: T | null | undefined): IOptional<NonNull<T>> {
-    return (new Optional<T>(value) as unknown) as IOptional<NonNull<T>>;
+  public static of<T>(value?: T | null | undefined): IOptional<NonNullable<T>> {
+    return (new Optional<T>(value) as unknown) as IOptional<NonNullable<T>>;
   }
 
-  public static some<T>(value: NonNull<T>): ISome<NonNull<T>> {
-    return Optional.of(value) as ISome<NonNull<T>>;
+  public static some<T>(value: NonNullable<T>): ISome<NonNullable<T>> {
+    return Optional.of(value) as ISome<NonNullable<T>>;
   }
 
-  public static none<T>(): INone<NonNull<T>> {
-    return Optional.of<T>() as INone<NonNull<T>>;
+  public static none<T>(): INone<NonNullable<T>> {
+    return Optional.of<T>() as INone<NonNullable<T>>;
   }
 
   public static liftList<T>(list: Array<IOptional<T>>): ISome<T[]> {
@@ -54,7 +53,7 @@ export class Optional<T> implements IOptional<T> {
     return this.value == null ? undefined : this.value;
   }
 
-  public mapToProperty<F extends keyof T>(field: F): IOptional<NonNull<Required<T>[F]>> {
+  public mapToProperty<F extends keyof T>(field: F): IOptional<NonNullable<Required<T>[F]>> {
     return this.flatMap(FnUtils.compose(FnUtils.liftProperty(field), Optional.of));
   }
 
@@ -66,15 +65,15 @@ export class Optional<T> implements IOptional<T> {
     return this;
   }
 
-  public filterProperty<F extends keyof T>(field: F, predicate: Predicate<NonNull<T[F]>>): IOptional<T> {
-    return this.filter((val) => val[field] != null ? predicate(val[field] as NonNull<T[F]>) : false);
+  public filterProperty<F extends keyof T>(field: F, predicate: Predicate<NonNullable<T[F]>>): IOptional<T> {
+    return this.filter((val) => val[field] != null ? predicate(val[field] as NonNullable<T[F]>) : false);
   }
 
-  public map<R>(fn: Fn<T, R>): IOptional<NonNull<R>> {
+  public map<R>(fn: Fn<T, R>): IOptional<NonNullable<R>> {
     if (this.value != null) {
       ((this as unknown) as Optional<R>).value = fn(this.value);
     }
-    return (this as unknown) as IOptional<NonNull<R>>;
+    return (this as unknown) as IOptional<NonNullable<R>>;
   }
 
   public flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R> {
@@ -84,21 +83,21 @@ export class Optional<T> implements IOptional<T> {
     return (this as unknown) as IOptional<R>;
   }
 
-  public orElse(defaultVal: NonNull<T>): ISome<T> {
+  public orElse(defaultVal: NonNullable<T>): ISome<T> {
     if (this.isEmpty()) {
       this.value = defaultVal;
     }
     return this as ISome<T>;
   }
 
-  public orElseGet(fn: Supplier<NonNull<T>>): ISome<T> {
+  public orElseGet(fn: Supplier<NonNullable<T>>): ISome<T> {
     if (this.isEmpty()) {
       this.value = fn();
     }
     return this as ISome<T>;
   }
 
-  public orElseThrow<E extends Error>(fn: Supplier<NonNull<E>>): ISome<T> | never {
+  public orElseThrow<E extends Error>(fn: Supplier<NonNullable<E>>): ISome<T> | never {
     if (this.isPresent()) {
       return this;
     }
@@ -109,6 +108,7 @@ export class Optional<T> implements IOptional<T> {
     return this.map(FnUtils.liftTry(fn))
   }
 
+  public coalesce(other: ISome<T>): ISome<T>;
   public coalesce(other: IOptional<T>): IOptional<T> {
     if (this.isEmpty()) {
       return other;
