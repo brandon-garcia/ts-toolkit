@@ -1,6 +1,6 @@
 {
   "name": "@bcg-ts/ts-toolkit",
-  "version": "3.2.1",
+  "version": "3.3.0",
   "description": "",
   "main": "index.js",
   "author": {
@@ -19,7 +19,38 @@
     "type": "git",
     "url": "https://github.com/brandon-garcia/ts-toolkit.git"
   },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts"
+    ],
+    "transform": {
+      "^.+\\.(ts)$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.json"
+      }
+    },
+    "testMatch": [
+      "tests/*.+ts"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.ts"
+    ],
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/node_modules",
+      "<rootDir>/tests"
+    ],
+    "coverageReporters": [
+      "text"
+    ],
+    "collectCoverage": true,
+    "testEnvironment": "node"
+  },
   "devDependencies": {
+    "@types/jest": "24.0.13",
+    "jest": "24.8.0",
+    "ts-jest": "24.0.2",
     "typescript": "3.4.5"
   }
 }
