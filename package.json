@@ -10,7 +10,8 @@
   "license": "MIT",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "compile": "tsc"
+    "compile": "tsc",
+    "test": "jest --detectOpenHandles"
   },
   "directories": {
     "lib": "."
@@ -20,9 +21,7 @@
     "url": "https://github.com/brandon-garcia/ts-toolkit.git"
   },
   "jest": {
-    "moduleFileExtensions": [
-      "ts"
-    ],
+    "moduleFileExtensions": ["ts", "js"],
     "transform": {
       "^.+\\.(ts)$": "ts-jest"
     },
@@ -32,7 +31,7 @@
       }
     },
     "testMatch": [
-      "tests/*.+ts"
+      "**/tests/*.+(ts|js)"
     ],
     "collectCoverageFrom": [
       "src/**/*.ts"
