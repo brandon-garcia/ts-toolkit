@@ -30,12 +30,19 @@ test("optional: getValue type compile test", () => {
     .getValue());
 
   onlyUndefined(Optional.none<number>()
+    .ifEmpty(() => {})
+    .ifPresent(() => {})
+    .filter(() => false)
     .map(onlyPositive)
     .getValue());
 
   onlyPositive(Optional.some(true)
-    .map<true>((p) => true)
+    .ifEmpty(() => {})
+    .ifPresent(() => {})
+    .map<true>(() => true)
     .map(onlyTrue)
+    .orElse(undefined)
+    .orElseGet(() => undefined)
     .getValue());
 });
 

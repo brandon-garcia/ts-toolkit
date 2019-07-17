@@ -84,18 +84,22 @@ export class Optional<T> implements IOptional<T> {
     return (this as unknown) as IOptional<R>;
   }
 
-  public orElse(defaultVal: NonNullable<T>): ISome<T> {
+  public orElse(defaultVal: null|undefined): INone<T>
+  public orElse(defaultVal: NonNullable<T>): ISome<T>
+  public orElse(defaultVal: Nullable<T>): IOptional<T> {
     if (this.isEmpty()) {
       this.value = defaultVal;
     }
-    return this as ISome<T>;
+    return this;
   }
 
-  public orElseGet(fn: Supplier<NonNullable<T>>): ISome<T> {
+  public orElseGet(fn: Supplier<null|undefined>): INone<T>
+  public orElseGet(fn: Supplier<NonNullable<T>>): ISome<T>
+  public orElseGet(fn: Supplier<Nullable<T>>): IOptional<T> {
     if (this.isEmpty()) {
       this.value = fn();
     }
-    return this as ISome<T>;
+    return this;
   }
 
   public orElseThrow<E extends Error>(fn: Supplier<NonNullable<E>>): ISome<T> | never {

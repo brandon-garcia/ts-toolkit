@@ -14,8 +14,12 @@ export interface IOptionalBase<T> {
   mapToProperty<F extends keyof T>(field: F): IOptional<T[F]>;
   flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R>;
 
-  orElse(defaultVal: T): ISome<T>;
-  orElseGet(fn: Supplier<T>): ISome<T>;
+  orElse(defaultVal: NonNullable<T>): ISome<T>;
+  orElse(defaultVal: Nullable<T>): IOptional<T>;
+
+  orElseGet(fn: Supplier<NonNullable<T>>): ISome<T>;
+  orElseGet(fn: Supplier<Nullable<T>>): IOptional<T>;
+
   orElseThrow<E extends Error>(fn: Supplier<E>): ISome<T> | never;
 
   ifPresent(fn: Consumer<T>): IOptional<T>;
@@ -27,8 +31,21 @@ export interface ISome<T> extends IOptionalBase<T> {
   isEmpty(): false;
   getValue(): T;
 
+  ifPresent(fn: Consumer<T>): ISome<T>;
+  ifEmpty(fn: Callback): ISome<T>;
+
   map<R>(fn: Fn<T, NonNullable<R>>): ISome<R>;
   map<R>(fn: Fn<T, Nullable<R>>): IOptional<R>;
+
+  orElse(defaultVal: undefined | null): ISome<T>;
+  orElse(defaultVal: NonNullable<T>): ISome<T>;
+  orElse(defaultVal: Nullable<T>): ISome<T>;
+
+  orElseGet(fn: Supplier<undefined | null>): ISome<T>;
+  orElseGet(fn: Supplier<NonNullable<T>>): ISome<T>;
+  orElseGet(fn: Supplier<Nullable<T>>): ISome<T>;
+
+  orElseThrow<E extends Error>(fn: Supplier<E>): ISome<T>;
 
   coalesce(other: IOptionalBase<T>): ISome<T>
 }
@@ -40,6 +57,9 @@ export interface INone<T> extends IOptionalBase<T> {
 
   filter<S extends T>(predicate: TypeGuard<T, S>): INone<S>;
   filter(predicate: Predicate<T>): INone<T>;
+
+  ifPresent(fn: Consumer<T>): INone<T>;
+  ifEmpty(fn: Callback): INone<T>;
 
   map<R>(fn: Fn<T, Nullable<R>>): INone<R>;
   mapToProperty<F extends keyof T>(field: F): INone<T[F]>;
