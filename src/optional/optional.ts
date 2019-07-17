@@ -1,21 +1,22 @@
 import {Callback, Consumer, Fn, FnUtils, Predicate, Supplier} from "../fn";
 import {IEither} from "../either/interface";
 import {INone, IOptional, ISome} from "./interface";
+import {Nullable} from "../types/interface";
 
-export class Optional<T extends NonNullable<unknown>> implements IOptional<T> {
-  private constructor(private value: T | null | undefined) {
+export class Optional<T> implements IOptional<T> {
+  private constructor(private value: Nullable<T>) {
   }
 
-  public static of<T>(value?: T | null | undefined): IOptional<NonNullable<T>> {
-    return (new Optional<T>(value) as unknown) as IOptional<NonNullable<T>>;
+  public static of<T>(value?: Nullable<T>): IOptional<T> {
+    return (new Optional<T>(value) as unknown) as IOptional<T>;
   }
 
-  public static some<T>(value: NonNullable<T>): ISome<NonNullable<T>> {
-    return Optional.of(value) as ISome<NonNullable<T>>;
+  public static some<T>(value: NonNullable<T>): ISome<T> {
+    return Optional.of(value) as ISome<T>;
   }
 
-  public static none<T>(): INone<NonNullable<T>> {
-    return Optional.of<T>() as INone<NonNullable<T>>;
+  public static none<T>(): INone<T> {
+    return Optional.of<T>(undefined) as INone<T>;
   }
 
   public static liftList<T>(list: Array<IOptional<T>>): ISome<T[]> {
@@ -53,7 +54,7 @@ export class Optional<T extends NonNullable<unknown>> implements IOptional<T> {
     return this.value == null ? undefined : this.value;
   }
 
-  public mapToProperty<F extends keyof T>(field: F): IOptional<NonNullable<Required<T>[F]>> {
+  public mapToProperty<F extends keyof T>(field: F): IOptional<Required<T>[F]> {
     return this.flatMap(FnUtils.compose(FnUtils.liftProperty(field), Optional.of));
   }
 
@@ -69,11 +70,11 @@ export class Optional<T extends NonNullable<unknown>> implements IOptional<T> {
     return this.filter((val) => val[field] != null ? predicate(val[field] as NonNullable<T[F]>) : false);
   }
 
-  public map<R>(fn: Fn<T, R>): IOptional<NonNullable<R>> {
+  public map<R>(fn: Fn<T, Nullable<R>>): IOptional<R> {
     if (this.value != null) {
       ((this as unknown) as Optional<R>).value = fn(this.value);
     }
-    return (this as unknown) as IOptional<NonNullable<R>>;
+    return this as any;
   }
 
   public flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R> {
@@ -130,3 +131,6 @@ export class Optional<T extends NonNullable<unknown>> implements IOptional<T> {
     return this;
   }
 }
+
+const v = undefined;
+const o = Optional.of(v);

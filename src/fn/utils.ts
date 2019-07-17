@@ -1,6 +1,7 @@
 import {IOptional, Optional} from "../optional";
 import {Either, IEither} from "../either";
 import {Consumer, Fn, Fn2, Fn3, Fn4, Reducer, Supplier} from "./interface";
+import {Nullable} from "../types";
 
 const bindInvoker = <T, R> (val: T) =>
   (fn: Fn<T, R>) => fn(val);
@@ -53,7 +54,7 @@ const liftProperty = <T, F extends keyof T> (field: F) =>
 const matchCompose = <T, R, CaseType extends string|number|symbol> (matcher: Fn<T, CaseType>, cases: Record<CaseType, Fn<T, R>>) =>
   (param: T) => cases[ matcher(param) ](param);
 
-const liftNullable = <T, R> (fn: Fn<T, R| null | undefined>): Fn<T, IOptional<R>> =>
+const liftNullable = <T, R> (fn: Fn<T, Nullable<R>>): Fn<T, IOptional<R>> =>
   (param: T) => Optional.of(fn(param));
 
 const liftTry = <T, R, E> (fn: Fn<T, R>): Fn<T, IEither<R, E>> =>
