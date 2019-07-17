@@ -27,6 +27,9 @@ export interface ISome<T> extends IOptionalBase<T> {
   isEmpty(): false;
   getValue(): T;
 
+  map<R>(fn: Fn<T, NonNullable<R>>): ISome<R>;
+  map<R>(fn: Fn<T, Nullable<R>>): IOptional<R>;
+
   coalesce(other: IOptionalBase<T>): ISome<T>
 }
 

@@ -8,6 +8,8 @@ const onlyObjectWithId = (p: { id: number }) =>
 
 const onlyUndefined = (p: undefined) => 1;
 
+const onlyTrue = (p: true) => 1;
+
 
 test("optional: nullable mapper compile test", () => {
   Optional.some(1)
@@ -29,6 +31,11 @@ test("optional: getValue type compile test", () => {
 
   onlyUndefined(Optional.none<number>()
     .map(onlyPositive)
+    .getValue());
+
+  onlyPositive(Optional.some(true)
+    .map<true>((p) => true)
+    .map(onlyTrue)
     .getValue());
 });
 
