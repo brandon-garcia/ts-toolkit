@@ -17,24 +17,24 @@ test("optional: nullable mapper compile test", () => {
     .map(onlyPositive);
 });
 
-test("optional: getValue type compile test", () => {
-  onlyPositive(Optional.some(1).getValue());
+test("optional: value type compile test", () => {
+  onlyPositive(Optional.some(1).value);
 
   onlyPositive(Optional.of(onlyPositive(1))
     .orElse(1)
-    .getValue());
+    .value);
 
   onlyObjectWithId(Optional.of({ id: 1 })
     .map(onlyObjectWithId)
     .orElse({ id: 2 })
-    .getValue());
+    .value);
 
   onlyUndefined(Optional.none<number>()
     .ifEmpty(() => {})
     .ifPresent(() => {})
     .filter(() => false)
     .map(onlyPositive)
-    .getValue());
+    .value);
 
   onlyPositive(Optional.some(true)
     .ifEmpty(() => {})
@@ -43,6 +43,6 @@ test("optional: getValue type compile test", () => {
     .map(onlyTrue)
     .orElse(undefined)
     .orElseGet(() => undefined)
-    .getValue());
+    .value);
 });
 

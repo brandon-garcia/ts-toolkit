@@ -23,7 +23,7 @@ export class Either<T, E> implements IEither<T, E> {
     return !this.flag;
   }
 
-  public getValue(): T | E {
+  public get value(): T | E {
     return this.data;
   }
 

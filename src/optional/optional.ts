@@ -4,7 +4,7 @@ import {INone, IOptional, ISome} from "./interface";
 import {Nullable} from "../types/interface";
 
 export class Optional<T> implements IOptional<T> {
-  private constructor(private value: Nullable<T>) {
+  private constructor(private data: Nullable<T>) {
   }
 
   public static of<T>(value?: Nullable<T>): IOptional<T> {
@@ -24,13 +24,13 @@ export class Optional<T> implements IOptional<T> {
   }
 
   public static flatten<T>(value: IOptional<IOptional<T>>): IOptional<T> {
-    return value.orElseGet(Optional.none).getValue();
+    return value.orElseGet(Optional.none).value;
   }
 
   public static unboxList<T>(list: Array<IOptional<T>>): T[] {
     return list
       .filter((maybeItem) => maybeItem.isPresent())
-      .map((maybeItem) => maybeItem.getValue() as T);
+      .map((maybeItem) => maybeItem.value as T);
   }
 
   public static coalesce<T>(list: Array<IOptional<T>>): IOptional<T> {
@@ -43,15 +43,15 @@ export class Optional<T> implements IOptional<T> {
   }
 
   public isPresent(): this is ISome<T> {
-    return this.value != null;
+    return this.data != null;
   }
 
   public isEmpty(): this is INone<T> {
     return !this.isPresent();
   }
 
-  public getValue(): T | undefined {
-    return this.value == null ? undefined : this.value;
+  public get value(): T | undefined {
+    return this.data == null ? undefined : this.data;
   }
 
   public mapToProperty<F extends keyof T>(field: F): IOptional<Required<T>[F]> {
@@ -59,10 +59,10 @@ export class Optional<T> implements IOptional<T> {
   }
 
   public filter(predicate: Predicate<T>): IOptional<T> {
-    if (this.value != null && predicate(this.value)) {
+    if (this.data != null && predicate(this.data)) {
       return this;
     }
-    this.value = null;
+    this.data = null;
     return this;
   }
 
@@ -71,15 +71,15 @@ export class Optional<T> implements IOptional<T> {
   }
 
   public map<R>(fn: Fn<T, Nullable<R>>): IOptional<R> {
-    if (this.value != null) {
-      ((this as unknown) as Optional<R>).value = fn(this.value);
+    if (this.data != null) {
+      ((this as unknown) as Optional<R>).data = fn(this.data);
     }
     return this as any;
   }
 
   public flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R> {
-    if (this.value != null) {
-      return fn(this.value);
+    if (this.data != null) {
+      return fn(this.data);
     }
     return (this as unknown) as IOptional<R>;
   }
@@ -88,7 +88,7 @@ export class Optional<T> implements IOptional<T> {
   public orElse(defaultVal: NonNullable<T>): ISome<T>
   public orElse(defaultVal: Nullable<T>): IOptional<T> {
     if (this.isEmpty()) {
-      this.value = defaultVal;
+      this.data = defaultVal;
     }
     return this;
   }
@@ -97,7 +97,7 @@ export class Optional<T> implements IOptional<T> {
   public orElseGet(fn: Supplier<NonNullable<T>>): ISome<T>
   public orElseGet(fn: Supplier<Nullable<T>>): IOptional<T> {
     if (this.isEmpty()) {
-      this.value = fn();
+      this.data = fn();
     }
     return this;
   }
@@ -122,14 +122,14 @@ export class Optional<T> implements IOptional<T> {
   }
 
   public ifPresent(fn: Consumer<T>): IOptional<T> {
-    if (this.value != null) {
-      fn(this.value);
+    if (this.data != null) {
+      fn(this.data);
     }
     return this;
   }
 
   public ifEmpty(fn: Callback): IOptional<T> {
-    if (this.value == null) {
+    if (this.data == null) {
       fn();
     }
     return this;

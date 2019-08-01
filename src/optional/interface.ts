@@ -29,7 +29,7 @@ export interface IOptionalBase<T> {
 export interface ISome<T> extends IOptionalBase<T> {
   isPresent(): true;
   isEmpty(): false;
-  getValue(): T;
+  readonly value: T;
 
   ifPresent(fn: Consumer<T>): ISome<T>;
   ifEmpty(fn: Callback): ISome<T>;
@@ -53,7 +53,7 @@ export interface ISome<T> extends IOptionalBase<T> {
 export interface INone<T> extends IOptionalBase<T> {
   isPresent(): false;
   isEmpty(): true;
-  getValue(): undefined;
+  readonly value: undefined;
 
   filter<S extends T>(predicate: TypeGuard<T, S>): INone<S>;
   filter(predicate: Predicate<T>): INone<T>;
@@ -72,7 +72,7 @@ export interface INone<T> extends IOptionalBase<T> {
 export interface IOptional<T> extends IOptionalBase<T> {
   isPresent(): this is ISome<T>;
   isEmpty(): this is INone<T>
-  getValue(): T | undefined;
+  readonly value: T | undefined;
 
   coalesce(other: ISome<T>): ISome<T>;
   coalesce(other: IOptional<T>): IOptional<T>;
