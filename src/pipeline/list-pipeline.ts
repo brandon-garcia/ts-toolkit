@@ -1,4 +1,4 @@
-import {Comparator, Consumer, Fn, FnUtils, Predicate, Reducer} from "../fn";
+import {Comparator, Consumer, Fn, Predicate, Reducer} from "../fn";
 import {IOptional} from "../optional/interface";
 import {Pipeline} from "./pipeline";
 import {IBoundListPipeline, IListPipeline, IPipeline} from "./interface";
@@ -6,6 +6,9 @@ import {BridgeListPipeline} from "./bridge-list-pipeline";
 import {EmptyListPipeline} from "./empty-list-pipeline";
 import {BoundListPipeline} from "./bound-list-pipeline";
 import {ListUtils} from "../list";
+import {compose} from "../fn/compose";
+import {liftConsumer} from "../fn/lift-consumer";
+import {liftProperty} from "../fn/lift-property";
 
 export class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
   public static identity<T>(): IListPipeline<T, T> {
@@ -32,16 +35,16 @@ export class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
   }
 
   public alsoDo(fn: Consumer<T2>): IListPipeline<T1, T2> {
-    return this.map(FnUtils.liftConsumer(fn));
+    return this.map(liftConsumer(fn));
   }
 
   public map<T3>(fn: Fn<T2, T3>): IListPipeline<T1, T3> {
-    ((this as unknown) as ListPipeline<T1, T3>).fn = FnUtils.compose(this.fn, fn);
+    ((this as unknown) as ListPipeline<T1, T3>).fn = compose(this.fn, fn);
     return (this as unknown) as IListPipeline<T1, T3>;
   }
 
   public mapToProperty<F extends keyof T2>(field: F): IListPipeline<T1, T2[F]> {
-    return this.map(FnUtils.liftProperty(field));
+    return this.map(liftProperty(field));
   }
 
   public flatMap<T3>(fn: Fn<T2[], T3[]>): IListPipeline<T1, T3> {
@@ -57,7 +60,7 @@ export class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
   }
 
   public filterProperty<F extends keyof T2>(field: F, fn: Predicate<T2[F]>): IListPipeline<T1, T2> {
-    return this.filter(FnUtils.compose(FnUtils.liftProperty(field), fn))
+    return this.filter(compose(liftProperty(field), fn))
   }
 
   public reduce(fn: Reducer<T2>): IPipeline<T1[], T2> {

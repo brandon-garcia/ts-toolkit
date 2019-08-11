@@ -1,5 +1,6 @@
-import {FnUtils, Reducer} from "../fn";
+import {Reducer} from "../fn";
 import {TypeGuard, TypeGuardType} from "./interface";
+import {liftParam} from "../fn/lift-param";
 
 type ResolvedSchema<T extends Record<string, TypeGuard<unknown, unknown>>> = {
   [F in keyof T]: TypeGuardType<T[F]>
@@ -75,7 +76,7 @@ const composeTypeGuard = <KnownT, MaybeT extends KnownT> (
 ): TypeGuard<KnownT, MaybeT> =>
   (v: KnownT): v is MaybeT =>
     predicates
-      .map(FnUtils.bindInvoker(v))
+      .map(liftParam(v))
       .reduce(reducer);
 
 export const TypeUtils = {

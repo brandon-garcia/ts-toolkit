@@ -1,9 +1,11 @@
 import {IBoundListPipeline, IListPipeline, IPipeline} from "./interface";
-import {Comparator, Consumer, Fn, FnUtils, Predicate, Reducer} from "../fn";
+import {Comparator, Consumer, Fn, Predicate, Reducer} from "../fn/interface";
 import {IOptional} from "../optional/interface";
 import {Pipeline} from "./pipeline";
 import {BoundListPipeline} from "./bound-list-pipeline";
 import {ListUtils} from "../list";
+import {liftConsumer} from "../fn/lift-consumer";
+import {liftProperty} from "../fn/lift-property";
 
 export class BridgeListPipeline<T1, T2, T3> implements IListPipeline<T1, T3> {
 
@@ -14,7 +16,7 @@ export class BridgeListPipeline<T1, T2, T3> implements IListPipeline<T1, T3> {
   }
 
   public alsoDo(fn: Consumer<T3>): IListPipeline<T1, T3> {
-    return this.map(FnUtils.liftConsumer(fn));
+    return this.map(liftConsumer(fn));
   }
 
   public map<T4>(fn: Fn<T3, T4>): IListPipeline<T1, T4> {
@@ -22,7 +24,7 @@ export class BridgeListPipeline<T1, T2, T3> implements IListPipeline<T1, T3> {
   }
 
   public mapToProperty<F extends keyof T3>(field: F): IListPipeline<T1, T3[F]> {
-    return this.map(FnUtils.liftProperty(field));
+    return this.map(liftProperty(field));
   }
 
   public flatMap<T4>(fn: Fn<T3[], T4[]>): IListPipeline<T1, T4> {

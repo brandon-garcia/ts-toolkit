@@ -1,5 +1,6 @@
 import {IBoundPipeline, IPipeline} from "./interface";
-import {Consumer, Fn, FnUtils, Supplier} from "../fn";
+import {Consumer, Fn, Supplier} from "../fn/interface";
+import {liftProperty} from "../fn/lift-property";
 
 export class BoundPipeline<T1, T2> implements IBoundPipeline<T2> {
   public constructor(
@@ -19,7 +20,7 @@ export class BoundPipeline<T1, T2> implements IBoundPipeline<T2> {
   }
 
   public mapToProperty<F extends keyof T2>(field: F): IBoundPipeline<T2[F]> {
-    return this.map(FnUtils.liftProperty(field));
+    return this.map(liftProperty(field));
   }
 
   public apply(): T2 {

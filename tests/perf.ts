@@ -1,7 +1,8 @@
-import {Fn, FnUtils} from "../src/fn";
+import {Fn} from "../src/fn/interface";
 import {Pipeline} from "../src/pipeline";
+import {compose} from "../src/fn/compose";
 
-test("FnUtils.compose", () => {
+test("compose/pipeline perf", () => {
 
   const fn1 = (n: number) => n * 2;
   const fn2 = (n: number) => n * 3;
@@ -14,7 +15,7 @@ test("FnUtils.compose", () => {
   const fn9 = (n: number) => `n: "${n}"`;
   const fn10 = (s: string) => s.length;
 
-  const viaCompose: Fn<number, number> = FnUtils.compose(fn1, fn2, fn3, fn4, fn5, fn6, fn7, fn8, fn9, fn10);
+  const viaCompose: Fn<number, number> = compose(fn1, fn2, fn3, fn4, fn5, fn6, fn7, fn8, fn9, fn10);
   const viaPipeline: Fn<number, number> = Pipeline.identity<number>()
     .map(fn1)
     .map(fn2)

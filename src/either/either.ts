@@ -1,5 +1,6 @@
 import {IEither, IError, ISuccess} from "./interface";
-import {Consumer, Fn, FnUtils} from "../fn";
+import {Consumer, Fn} from "../fn/interface";
+import {liftTry} from "../fn/lift-try";
 
 export class Either<T, E> implements IEither<T, E> {
   public static success<T, E>(data: T): ISuccess<T, E> {
@@ -42,7 +43,7 @@ export class Either<T, E> implements IEither<T, E> {
   }
 
   public try<R>(fn: Fn<T, R>): IEither<R, E> {
-    return this.flatMap(FnUtils.liftTry(fn));
+    return this.flatMap(liftTry(fn));
   }
 
   public flatMap<R>(fn: Fn<T, IEither<R, E>>): IEither<R, E> {

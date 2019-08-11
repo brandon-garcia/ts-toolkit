@@ -1,11 +1,13 @@
 import {IBoundPipeline, IPipeline} from "./interface";
-import {Consumer, Fn, FnUtils} from "../fn";
+import {Consumer, Fn} from "../fn";
 import {BoundPipeline} from "./bound-pipeline";
 import {Pipeline} from "./pipeline";
+import {liftConsumer} from "../fn/lift-consumer";
+import {liftProperty} from "../fn/lift-property";
 
 export class EmptyPipeline<T> implements IPipeline<T, T> {
   public alsoDo(fn: Consumer<T>): IPipeline<T, T> {
-    return this.map(FnUtils.liftConsumer(fn));
+    return this.map(liftConsumer(fn));
   }
 
   public apply(param: T): T {
@@ -21,7 +23,7 @@ export class EmptyPipeline<T> implements IPipeline<T, T> {
   }
 
   public mapToProperty<F extends keyof T>(field: F): IPipeline<T, T[F]> {
-    return this.map(FnUtils.liftProperty(field));
+    return this.map(liftProperty(field));
   }
 
   public toCallable(): Fn<T, T> {

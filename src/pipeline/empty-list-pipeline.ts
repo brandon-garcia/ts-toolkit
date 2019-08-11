@@ -1,14 +1,17 @@
 import {IBoundListPipeline, IListPipeline, IPipeline} from "./interface";
-import {Comparator, Consumer, Fn, FnUtils, Predicate, Reducer} from "../fn";
+import {Comparator, Consumer, Fn, Predicate, Reducer} from "../fn/interface";
 import {IOptional} from "../optional/interface";
 import {Pipeline} from "./pipeline";
 import {ListPipeline} from "./list-pipeline";
 import {BoundListPipeline} from "./bound-list-pipeline";
 import {ListUtils} from "../list";
+import {compose} from "../fn/compose";
+import {liftConsumer} from "../fn/lift-consumer";
+import {liftProperty} from "../fn/lift-property";
 
 export class EmptyListPipeline<T1> implements IListPipeline<T1, T1> {
   public alsoDo(fn: Consumer<T1>): IListPipeline<T1, T1> {
-    return this.map(FnUtils.liftConsumer(fn));
+    return this.map(liftConsumer(fn));
   }
 
   public map<T2>(fn: Fn<T1, T2>): IListPipeline<T1, T2> {
@@ -16,7 +19,7 @@ export class EmptyListPipeline<T1> implements IListPipeline<T1, T1> {
   }
 
   public mapToProperty<F extends keyof T1>(field: F): IListPipeline<T1, T1[F]> {
-    return this.map(FnUtils.liftProperty(field));
+    return this.map(liftProperty(field));
   }
 
   public flatMap<T2>(fn: Fn<T1[], T2[]>): IListPipeline<T1, T2> {
@@ -32,7 +35,7 @@ export class EmptyListPipeline<T1> implements IListPipeline<T1, T1> {
   }
 
   public filterProperty<F extends keyof T1>(field: F, fn: Predicate<T1[F]>): IListPipeline<T1, T1> {
-    return this.filter(FnUtils.compose(FnUtils.liftProperty(field), fn))
+    return this.filter(compose(liftProperty(field), fn))
   }
 
   public reduce(fn: Reducer<T1>): IPipeline<T1[], T1> {

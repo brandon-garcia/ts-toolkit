@@ -1,7 +1,10 @@
-import {Callback, Consumer, Fn, FnUtils, Predicate, Supplier} from "../fn";
+import {Callback, Consumer, Fn, Predicate, Supplier} from "../fn/interface";
 import {IEither} from "../either/interface";
 import {INone, IOptional, ISome} from "./interface";
 import {Nullable} from "../types/interface";
+import {compose} from "../fn/compose";
+import {liftProperty} from "../fn/lift-property";
+import {liftTry} from "../fn/lift-try";
 
 export class Optional<T> implements IOptional<T> {
   private constructor(private data: Nullable<T>) {
@@ -55,7 +58,7 @@ export class Optional<T> implements IOptional<T> {
   }
 
   public mapToProperty<F extends keyof T>(field: F): IOptional<Required<T>[F]> {
-    return this.flatMap(FnUtils.compose(FnUtils.liftProperty(field), Optional.of));
+    return this.flatMap(compose(liftProperty(field), Optional.of));
   }
 
   public filter(predicate: Predicate<T>): IOptional<T> {
@@ -110,7 +113,7 @@ export class Optional<T> implements IOptional<T> {
   }
 
   public try<R, E>(fn: Fn<T, R>): IOptional<IEither<R, E>> {
-    return this.map(FnUtils.liftTry(fn))
+    return this.map(liftTry(fn))
   }
 
   public coalesce(other: ISome<T>): ISome<T>;

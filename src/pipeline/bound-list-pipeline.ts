@@ -1,6 +1,7 @@
 import {IBoundListPipeline, IBoundPipeline, IListPipeline} from "./interface";
-import {Comparator, Consumer, Fn, FnUtils, Predicate, Reducer, Supplier} from "../fn";
+import {Comparator, Consumer, Fn, Predicate, Reducer, Supplier} from "../fn/interface";
 import {IOptional} from "../optional/interface";
+import {liftProperty} from "../fn/lift-property";
 
 export class BoundListPipeline<T1, T2> implements IBoundListPipeline<T2> {
   public constructor(
@@ -20,7 +21,7 @@ export class BoundListPipeline<T1, T2> implements IBoundListPipeline<T2> {
   }
 
   public mapToProperty<F extends keyof T2>(field: F): IBoundListPipeline<T2[F]> {
-    return this.map(FnUtils.liftProperty(field));
+    return this.map(liftProperty(field));
   }
 
   public flatMap<T3>(fn: Fn<T2[], T3[]>): IBoundListPipeline<T3> {
