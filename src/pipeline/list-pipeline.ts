@@ -1,10 +1,9 @@
 import {Comparator, Consumer, Fn, Predicate, Reducer} from "../fn";
 import {IOptional} from "../optional/interface";
 import {Pipeline} from "./pipeline";
-import {IBoundListPipeline, IListPipeline, IPipeline} from "./interface";
+import {IListPipeline, IPipeline} from "./interface";
 import {BridgeListPipeline} from "./bridge-list-pipeline";
 import {EmptyListPipeline} from "./empty-list-pipeline";
-import {BoundListPipeline} from "./bound-list-pipeline";
 import {ListUtils} from "../list";
 import {compose} from "../fn/compose";
 import {liftConsumer} from "../fn/lift-consumer";
@@ -13,10 +12,6 @@ import {liftProperty} from "../fn/lift-property";
 export class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
   public static identity<T>(): IListPipeline<T, T> {
     return new EmptyListPipeline();
-  }
-
-  public static bound<T>(list: T[]): IBoundListPipeline<T> {
-    return new BoundListPipeline(list, ListPipeline.identity());
   }
 
   public static fromCallable<T1, T2>(fn: Fn<T1, T2>): IListPipeline<T1, T2> {
@@ -28,7 +23,7 @@ export class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
   }
 
   public static liftPipeline<T1, T2>(pipeline: IPipeline<T1[], T2[]>): IListPipeline<T1, T2> {
-    return ListPipeline.liftCallable(pipeline.toCallable());
+    return ListPipeline.liftCallable(pipeline.callable);
   }
 
   private constructor(private fn: Fn<T1, T2>) {
@@ -48,7 +43,7 @@ export class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
   }
 
   public flatMap<T3>(fn: Fn<T2[], T3[]>): IListPipeline<T1, T3> {
-    return new BridgeListPipeline(this.toCallable(), ListPipeline.liftCallable(fn));
+    return new BridgeListPipeline(this.callable, ListPipeline.liftCallable(fn));
   }
 
   public sort(fn: Comparator<T2>): IListPipeline<T1, T2> {
@@ -71,19 +66,11 @@ export class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
     return this.toPipeline().map(ListUtils.getFirst);
   }
 
-  public apply(list: T1[]): T2[] {
-    return list.map(this.fn);
+  public get callable(): Fn<T1[], T2[]> {
+    return (list: T1[]) => list.map(this.fn);
   }
 
-  public bind(list: T1[]): IBoundListPipeline<T2> {
-    return new BoundListPipeline(list, this);
-  }
-
-  public toCallable(): Fn<T1[], T2[]> {
-    return this.apply.bind(this);
-  }
-
-  public toPipeline(): IPipeline<T1[], T2[]> {
-    return Pipeline.fromCallable(this.toCallable());
+  private toPipeline(): IPipeline<T1[], T2[]> {
+    return Pipeline.fromCallable(this.callable);
   }
 }

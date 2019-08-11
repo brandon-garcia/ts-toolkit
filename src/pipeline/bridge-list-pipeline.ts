@@ -1,8 +1,7 @@
-import {IBoundListPipeline, IListPipeline, IPipeline} from "./interface";
+import {IListPipeline, IPipeline} from "./interface";
 import {Comparator, Consumer, Fn, Predicate, Reducer} from "../fn/interface";
 import {IOptional} from "../optional/interface";
 import {Pipeline} from "./pipeline";
-import {BoundListPipeline} from "./bound-list-pipeline";
 import {ListUtils} from "../list";
 import {liftConsumer} from "../fn/lift-consumer";
 import {liftProperty} from "../fn/lift-property";
@@ -51,19 +50,11 @@ export class BridgeListPipeline<T1, T2, T3> implements IListPipeline<T1, T3> {
     return this.toPipeline().map(ListUtils.getFirst);
   }
 
-  public apply(list: T1[]): T3[] {
-    return this.pipeline.apply(this.fn(list));
+  public get callable(): Fn<T1[], T3[]> {
+    return (list: T1[]) => this.pipeline.callable(this.fn(list));
   }
 
-  public bind(list: T1[]): IBoundListPipeline<T3> {
-    return new BoundListPipeline(list, this);
-  }
-
-  public toCallable(): Fn<T1[], T3[]> {
-    return this.apply.bind(this);
-  }
-
-  public toPipeline(): IPipeline<T1[], T3[]> {
-    return Pipeline.fromCallable(this.toCallable());
+  private toPipeline(): IPipeline<T1[], T3[]> {
+    return Pipeline.fromCallable(this.callable);
   }
 }
