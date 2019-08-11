@@ -7,3 +7,4 @@ export * from "./lift-property";
 export * from "./lift-try";
 export * from "./match-compose";
 export * from "./partial-factory";
+export * from "./memoize";

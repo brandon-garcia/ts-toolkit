@@ -1,4 +1,5 @@
-import {compose, createPartialFactory, Fn} from "../src/fn";
+import {compose, createPartialFactory, Fn, memoize} from "../src/fn";
+import {Pipeline} from "../src/pipeline";
 
 test("compose", () => {
   const param = "hello world";
@@ -121,4 +122,22 @@ test("createPartialFactory", () => {
   expect(object.a).toBe(true);
   expect(object.b).toBe("hello");
   expect(object.c).toBe(1);
+});
+
+test("memoize", () => {
+  const lengthFn = (p: string) => p.length;
+  const stringifyFn = (p: number) => p.toString();
+
+  let pipeline = Pipeline.identity<string>();
+  for (let i = 0; i < 1000; i++) {
+    pipeline = pipeline
+      .map(lengthFn)
+      .map(stringifyFn);
+  }
+
+  const unmemoized = pipeline.callable;
+  const memoized = memoize(unmemoized);
+
+  const param = "hello";
+  expect(unmemoized(param)).toBe(memoized(param));
 });
