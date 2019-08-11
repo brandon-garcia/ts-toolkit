@@ -138,6 +138,3 @@ export class Optional<T> implements IOptional<T> {
     return this;
   }
 }
-
-const v = undefined;
-const o = Optional.of(v);
