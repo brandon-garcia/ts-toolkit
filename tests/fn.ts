@@ -1,4 +1,4 @@
-import {compose, Fn} from "../src/fn";
+import {compose, createPartialFactory, Fn} from "../src/fn";
 
 test("compose", () => {
   const param = "hello world";
@@ -103,4 +103,22 @@ test("compose", () => {
   );
 
   expect(fn10(param)).toBe("1");
+});
+
+test("createPartialFactory", () => {
+  type FullType = {
+    a: boolean;
+    b: string;
+    c: number;
+  }
+
+  const fixed = { b: "hello" };
+  const remaining = { a: true, c: 1 };
+
+  const factory = createPartialFactory<FullType, "b">(fixed);
+  const object: FullType = factory(remaining);
+
+  expect(object.a).toBe(true);
+  expect(object.b).toBe("hello");
+  expect(object.c).toBe(1);
 });

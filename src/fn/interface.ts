@@ -24,4 +24,3 @@ export type Predicate<T> = Fn<T, boolean>;
 export type Reducer<T> = Fn2<T, T, T>;
 export type Comparator<T> = Fn2<T, T, -1|0|1>;
 export type Callback = Fn0<void>;
-
