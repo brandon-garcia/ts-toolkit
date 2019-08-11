@@ -1,5 +1,5 @@
 import { IEither, IError, ISuccess } from "./interface";
-import { Consumer, Fn } from "../fn";
+import { Consumer, Fn } from "../fn/interface";
 export declare class Either<T, E> implements IEither<T, E> {
     private flag;
     private data;
@@ -9,7 +9,7 @@ export declare class Either<T, E> implements IEither<T, E> {
     private constructor();
     isSuccess(): this is ISuccess<T, E>;
     isError(): this is IError<T, E>;
-    getValue(): T | E;
+    readonly value: T | E;
     ifError(consumer: Consumer<E>): IEither<T, E>;
     ifSuccess(consumer: Consumer<T>): IEither<T, E>;
     try<R>(fn: Fn<T, R>): IEither<R, E>;

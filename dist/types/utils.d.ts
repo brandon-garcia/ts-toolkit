@@ -1,8 +1,12 @@
-import { TypeGuard } from "./interface";
+import { TypeGuard, TypeGuardType } from "./interface";
+declare type ResolvedSchema<T extends Record<string, TypeGuard<unknown, unknown>>> = {
+    [F in keyof T]: TypeGuardType<T[F]>;
+};
 export declare const TypeUtils: {
     boolean: <T>(v: T) => v is (T & false) | (T & true);
     composeTypeGuard: <KnownT, MaybeT extends KnownT>(reducer: import("../fn").Fn2<boolean, boolean, boolean>, predicates: TypeGuard<KnownT, MaybeT>[]) => TypeGuard<KnownT, MaybeT>;
     field: <T extends any, FName extends string, FType>(obj: T, field: FName, validator: TypeGuard<unknown, FType>) => obj is T & Record<FName, FType>;
+    fields: <T extends unknown, Schema extends Record<string, TypeGuard<unknown, unknown>>>(obj: T, schema: Schema) => obj is T & ResolvedSchema<Schema>;
     function: <T>(v: T) => v is T & Function;
     nonEmptyString: <T>(v: T) => v is T & string;
     nonNull: <T>(v: T | null | undefined) => v is T;
@@ -15,3 +19,4 @@ export declare const TypeUtils: {
     symbol: <T>(v: T) => v is T & symbol;
     unknown: (v: unknown) => v is unknown;
 };
+export {};

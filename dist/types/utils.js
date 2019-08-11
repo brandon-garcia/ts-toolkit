@@ -1,8 +1,21 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var fn_1 = require("../fn");
+var lift_param_1 = require("../fn/lift-param");
 var hasField = function (obj, field, validator) {
-    return field in obj && validator(obj[field]);
+    return isObject(obj) &&
+        field in obj &&
+        isNonNull(obj[field]) &&
+        validator(obj[field]);
+};
+var hasFields = function (obj, schema) {
+    for (var fieldName in schema) {
+        if (schema.hasOwnProperty(fieldName) && isFunction(schema[fieldName])) {
+            if (!hasField(obj, fieldName, schema[fieldName])) {
+                return false;
+            }
+        }
+    }
+    return true;
 };
 var validateOptionalField = function (obj, field, validator) {
     return !(field in obj) || obj[field] == null || validator(obj[field]);
@@ -43,7 +56,7 @@ var isNonEmptyString = function (v) {
 var composeTypeGuard = function (reducer, predicates) {
     return function (v) {
         return predicates
-            .map(fn_1.FnUtils.bindInvoker(v))
+            .map(lift_param_1.liftParam(v))
             .reduce(reducer);
     };
 };
@@ -51,6 +64,7 @@ exports.TypeUtils = {
     boolean: isBoolean,
     composeTypeGuard: composeTypeGuard,
     field: hasField,
+    fields: hasFields,
     function: isFunction,
     nonEmptyString: isNonEmptyString,
     nonNull: isNonNull,

@@ -3,7 +3,6 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(require("./applicator"));
 __export(require("./either"));
 __export(require("./fn"));
 __export(require("./list"));

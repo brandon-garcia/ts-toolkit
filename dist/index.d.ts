@@ -1,4 +1,3 @@
-export * from "./applicator";
 export * from "./either";
 export * from "./fn";
 export * from "./list";

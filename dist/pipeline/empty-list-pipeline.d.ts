@@ -1,5 +1,5 @@
-import { IBoundListPipeline, IListPipeline, IPipeline } from "./interface";
-import { Comparator, Consumer, Fn, Predicate, Reducer } from "../fn";
+import { IListPipeline, IPipeline } from "./interface";
+import { Comparator, Consumer, Fn, Predicate, Reducer } from "../fn/interface";
 import { IOptional } from "../optional/interface";
 export declare class EmptyListPipeline<T1> implements IListPipeline<T1, T1> {
     alsoDo(fn: Consumer<T1>): IListPipeline<T1, T1>;
@@ -11,8 +11,6 @@ export declare class EmptyListPipeline<T1> implements IListPipeline<T1, T1> {
     filterProperty<F extends keyof T1>(field: F, fn: Predicate<T1[F]>): IListPipeline<T1, T1>;
     reduce(fn: Reducer<T1>): IPipeline<T1[], T1>;
     toFirst(): IPipeline<T1[], IOptional<T1>>;
-    apply(list: T1[]): T1[];
-    bind(list: T1[]): IBoundListPipeline<T1>;
-    toCallable(): Fn<T1[], T1[]>;
-    toPipeline(): IPipeline<T1[], T1[]>;
+    readonly callable: Fn<T1[], T1[]>;
+    private toPipeline;
 }

@@ -1,6 +1,6 @@
 {
   "name": "@bcg-ts/ts-toolkit",
-  "version": "3.3.0",
+  "version": "4.0.0",
   "description": "",
   "main": "index.js",
   "author": {
@@ -21,7 +21,10 @@
     "url": "https://github.com/brandon-garcia/ts-toolkit.git"
   },
   "jest": {
-    "moduleFileExtensions": ["ts", "js"],
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
     "transform": {
       "^.+\\.(ts)$": "ts-jest"
     },

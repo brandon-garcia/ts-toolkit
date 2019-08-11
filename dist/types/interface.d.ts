@@ -1,5 +1,6 @@
-export declare type TypeGuard<KnownT, MaybeT extends KnownT> = (p: KnownT) => p is MaybeT;
-export declare type NonNull<T> = T extends null | undefined ? Exclude<T, null | undefined> : T;
+export declare type TypeGuard<KnownT = unknown, MaybeT extends KnownT = KnownT> = (p: KnownT) => p is MaybeT;
+export declare type TypeGuardType<TG extends TypeGuard> = TG extends TypeGuard<unknown, infer T> ? T : never;
+export declare type Nullable<T extends NonNullable<unknown>> = T | null | undefined;
 export declare type Fields<T> = {
     [K in keyof T]: T[K] extends Function ? never : T[K];
 };

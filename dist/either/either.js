@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var fn_1 = require("../fn");
+var lift_try_1 = require("../fn/lift-try");
 var Either = (function () {
     function Either(flag, data) {
         this.flag = flag;
@@ -18,9 +18,13 @@ var Either = (function () {
     Either.prototype.isError = function () {
         return !this.flag;
     };
-    Either.prototype.getValue = function () {
-        return this.data;
-    };
+    Object.defineProperty(Either.prototype, "value", {
+        get: function () {
+            return this.data;
+        },
+        enumerable: true,
+        configurable: true
+    });
     Either.prototype.ifError = function (consumer) {
         if (!this.flag) {
             consumer(this.data);
@@ -34,7 +38,7 @@ var Either = (function () {
         return this;
     };
     Either.prototype.try = function (fn) {
-        return this.flatMap(fn_1.FnUtils.liftTry(fn));
+        return this.flatMap(lift_try_1.liftTry(fn));
     };
     Either.prototype.flatMap = function (fn) {
         if (this.flag) {

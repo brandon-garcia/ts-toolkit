@@ -1,10 +1,9 @@
 import { Comparator, Consumer, Fn, Predicate, Reducer } from "../fn";
 import { IOptional } from "../optional/interface";
-import { IBoundListPipeline, IListPipeline, IPipeline } from "./interface";
+import { IListPipeline, IPipeline } from "./interface";
 export declare class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
     private fn;
     static identity<T>(): IListPipeline<T, T>;
-    static bound<T>(list: T[]): IBoundListPipeline<T>;
     static fromCallable<T1, T2>(fn: Fn<T1, T2>): IListPipeline<T1, T2>;
     static liftCallable<T1, T2>(fn: Fn<T1[], T2[]>): IListPipeline<T1, T2>;
     static liftPipeline<T1, T2>(pipeline: IPipeline<T1[], T2[]>): IListPipeline<T1, T2>;
@@ -18,8 +17,6 @@ export declare class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
     filterProperty<F extends keyof T2>(field: F, fn: Predicate<T2[F]>): IListPipeline<T1, T2>;
     reduce(fn: Reducer<T2>): IPipeline<T1[], T2>;
     toFirst(): IPipeline<T1[], IOptional<T2>>;
-    apply(list: T1[]): T2[];
-    bind(list: T1[]): IBoundListPipeline<T2>;
-    toCallable(): Fn<T1[], T2[]>;
-    toPipeline(): IPipeline<T1[], T2[]>;
+    readonly callable: Fn<T1[], T2[]>;
+    private toPipeline;
 }

@@ -1,4 +1,3 @@
-export * from "./applicator/interface";
 export * from "./either/interface";
 export * from "./fn/interface";
 export * from "./optional/interface";
