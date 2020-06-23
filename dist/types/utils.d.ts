@@ -18,5 +18,8 @@ export declare const TypeUtils: {
     string: <T>(v: T) => v is T & string;
     symbol: <T>(v: T) => v is T & symbol;
     unknown: (v: unknown) => v is unknown;
+    array: <T, A>(v: T, itemValidator: TypeGuard<unknown, A>) => v is T & A[];
+    stringArray: <T>(v: T) => v is T & string[];
+    numberArray: <T>(v: T) => v is T & number[];
 };
 export {};

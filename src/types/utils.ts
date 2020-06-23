@@ -70,6 +70,24 @@ const isUnknown = (v: unknown): v is unknown =>
 const isNonEmptyString = <T> (v: T): v is T & string =>
   isString(v) && v.length > 0;
 
+const isArray = <T, A> (v: T, itemValidator: TypeGuard<unknown, A>): v is T & A[] => {
+  if (!Array.isArray(v)) {
+    return false;
+  }
+  for (let i = 0; i < v.length; ++i) {
+    if (!itemValidator(v[i])) {
+      return false;
+    }
+  }
+  return true;
+};
+
+const isStringArray = <T> (v: T): v is T & string[] =>
+  isArray(v, isString);
+
+const isNumberArray = <T> (v: T): v is T & number[] =>
+  isArray(v, isNumber);
+
 const composeTypeGuard = <KnownT, MaybeT extends KnownT> (
   reducer: Reducer<boolean>,
   predicates: TypeGuard<KnownT, MaybeT>[],
@@ -95,4 +113,7 @@ export const TypeUtils = {
   string: isString,
   symbol: isSymbol,
   unknown: isUnknown,
+  array: isArray,
+  stringArray: isStringArray,
+  numberArray: isNumberArray,
 };

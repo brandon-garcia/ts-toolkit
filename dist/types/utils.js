@@ -53,6 +53,23 @@ var isUnknown = function (v) {
 var isNonEmptyString = function (v) {
     return isString(v) && v.length > 0;
 };
+var isArray = function (v, itemValidator) {
+    if (!Array.isArray(v)) {
+        return false;
+    }
+    for (var i = 0; i < v.length; ++i) {
+        if (!itemValidator(v[i])) {
+            return false;
+        }
+    }
+    return true;
+};
+var isStringArray = function (v) {
+    return isArray(v, isString);
+};
+var isNumberArray = function (v) {
+    return isArray(v, isNumber);
+};
 var composeTypeGuard = function (reducer, predicates) {
     return function (v) {
         return predicates
@@ -76,5 +93,8 @@ exports.TypeUtils = {
     string: isString,
     symbol: isSymbol,
     unknown: isUnknown,
+    array: isArray,
+    stringArray: isStringArray,
+    numberArray: isNumberArray,
 };
 //# sourceMappingURL=utils.js.map
