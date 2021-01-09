@@ -75,7 +75,7 @@ export class Optional<T> implements IOptional<T> {
 
   public map<R>(fn: Fn<T, Nullable<R>>): IOptional<R> {
     if (this.data != null) {
-      ((this as unknown) as Optional<R>).data = fn(this.data);
+      return Optional.of(fn(this.data));
     }
     return this as any;
   }

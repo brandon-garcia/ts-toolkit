@@ -64,7 +64,7 @@ var Optional = (function () {
     };
     Optional.prototype.map = function (fn) {
         if (this.data != null) {
-            this.data = fn(this.data);
+            return Optional.of(fn(this.data));
         }
         return this;
     };
