@@ -7,7 +7,7 @@ import {liftProperty} from "../fn/lift-property";
 import {liftTry} from "../fn/lift-try";
 
 export class Optional<T> implements IOptional<T> {
-  private constructor(private data: Nullable<T>) {
+  private constructor(private readonly data: Nullable<T>) {
   }
 
   public static of<T>(value?: Nullable<T>): IOptional<T> {
@@ -65,8 +65,7 @@ export class Optional<T> implements IOptional<T> {
     if (this.data != null && predicate(this.data)) {
       return this;
     }
-    this.data = null;
-    return this;
+    return Optional.none();
   }
 
   public filterProperty<F extends keyof T>(field: F, predicate: Predicate<NonNullable<T[F]>>): IOptional<T> {
@@ -91,7 +90,7 @@ export class Optional<T> implements IOptional<T> {
   public orElse(defaultVal: NonNullable<T>): ISome<T>
   public orElse(defaultVal: Nullable<T>): IOptional<T> {
     if (this.isEmpty()) {
-      this.data = defaultVal;
+      return Optional.of(defaultVal);
     }
     return this;
   }
@@ -100,7 +99,7 @@ export class Optional<T> implements IOptional<T> {
   public orElseGet(fn: Supplier<NonNullable<T>>): ISome<T>
   public orElseGet(fn: Supplier<Nullable<T>>): IOptional<T> {
     if (this.isEmpty()) {
-      this.data = fn();
+      return Optional.of(fn());
     }
     return this;
   }
