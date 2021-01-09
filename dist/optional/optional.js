@@ -56,8 +56,7 @@ var Optional = (function () {
         if (this.data != null && predicate(this.data)) {
             return this;
         }
-        this.data = null;
-        return this;
+        return Optional.none();
     };
     Optional.prototype.filterProperty = function (field, predicate) {
         return this.filter(function (val) { return val[field] != null ? predicate(val[field]) : false; });
@@ -76,13 +75,13 @@ var Optional = (function () {
     };
     Optional.prototype.orElse = function (defaultVal) {
         if (this.isEmpty()) {
-            this.data = defaultVal;
+            return Optional.of(defaultVal);
         }
         return this;
     };
     Optional.prototype.orElseGet = function (fn) {
         if (this.isEmpty()) {
-            this.data = fn();
+            return Optional.of(fn());
         }
         return this;
     };

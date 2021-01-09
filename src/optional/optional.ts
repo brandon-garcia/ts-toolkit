@@ -1,5 +1,5 @@
 import {Callback, Consumer, Fn, Predicate, Supplier} from "../fn/interface";
-import {IEither} from "../either/interface";
+import {IResult} from "../result/interface";
 import {INone, IOptional, ISome} from "./interface";
 import {Nullable} from "../types/interface";
 import {compose} from "../fn/compose";
@@ -111,7 +111,7 @@ export class Optional<T> implements IOptional<T> {
     throw fn();
   }
 
-  public try<R, E>(fn: Fn<T, R>): IOptional<IEither<R, E>> {
+  public try<R, E>(fn: Fn<T, R>): IOptional<IResult<R, E>> {
     return this.map(liftTry(fn))
   }
 

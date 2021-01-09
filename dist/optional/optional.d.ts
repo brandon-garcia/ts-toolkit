@@ -1,9 +1,9 @@
 import { Callback, Consumer, Fn, Predicate, Supplier } from "../fn/interface";
-import { IEither } from "../either/interface";
+import { IResult } from "../result/interface";
 import { INone, IOptional, ISome } from "./interface";
 import { Nullable } from "../types/interface";
 export declare class Optional<T> implements IOptional<T> {
-    private data;
+    private readonly data;
     private constructor();
     static of<T>(value?: Nullable<T>): IOptional<T>;
     static some<T>(value: NonNullable<T>): ISome<T>;
@@ -25,7 +25,7 @@ export declare class Optional<T> implements IOptional<T> {
     orElseGet(fn: Supplier<null | undefined>): INone<T>;
     orElseGet(fn: Supplier<NonNullable<T>>): ISome<T>;
     orElseThrow<E extends Error>(fn: Supplier<NonNullable<E>>): ISome<T> | never;
-    try<R, E>(fn: Fn<T, R>): IOptional<IEither<R, E>>;
+    try<R, E>(fn: Fn<T, R>): IOptional<IResult<R, E>>;
     coalesce(other: ISome<T>): ISome<T>;
     ifPresent(fn: Consumer<T>): IOptional<T>;
     ifEmpty(fn: Callback): IOptional<T>;

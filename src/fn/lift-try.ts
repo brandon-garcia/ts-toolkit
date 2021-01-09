@@ -1,13 +1,13 @@
 import {Fn} from "./interface";
-import {Either, IEither} from "../either";
+import {Result, IResult} from "../result";
 
-export const liftTry = <T, R, E> (fn: Fn<T, R>): Fn<T, IEither<R, E>> =>
+export const liftTry = <T, R, E> (fn: Fn<T, R>): Fn<T, IResult<R, E>> =>
   (param: T) => {
     let result: R;
     try {
       result = fn(param);
     } catch (err) {
-      return Either.error<R, E>(err);
+      return Result.error<R, E>(err);
     }
-    return Either.success<R, E>(result);
+    return Result.success<R, E>(result);
   };

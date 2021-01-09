@@ -3,13 +3,13 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(require("./either"));
 __export(require("./fn"));
 __export(require("./list"));
 __export(require("./null"));
 __export(require("./optional"));
 __export(require("./pipeline"));
 __export(require("./reductions"));
+__export(require("./result"));
 __export(require("./strings"));
 __export(require("./types"));
 //# sourceMappingURL=index.js.map

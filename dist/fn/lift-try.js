@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var either_1 = require("../either");
+var result_1 = require("../result");
 exports.liftTry = function (fn) {
     return function (param) {
         var result;
@@ -8,9 +8,9 @@ exports.liftTry = function (fn) {
             result = fn(param);
         }
         catch (err) {
-            return either_1.Either.error(err);
+            return result_1.Result.error(err);
         }
-        return either_1.Either.success(result);
+        return result_1.Result.success(result);
     };
 };
 //# sourceMappingURL=lift-try.js.map

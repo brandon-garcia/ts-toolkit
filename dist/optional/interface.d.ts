@@ -1,12 +1,12 @@
 import { Callback, Consumer, Fn, Predicate, Supplier } from "../fn/interface";
 import { Nullable, TypeGuard } from "../types/interface";
-import { IEither } from "../either/interface";
+import { IResult } from "../result/interface";
 export interface IOptionalBase<T> {
     filter<S extends T>(predicate: TypeGuard<T, S>): IOptional<S>;
     filter(predicate: Predicate<T>): IOptional<T>;
     filterProperty<F extends keyof T>(field: F, predicate: Predicate<T[F]>): IOptional<T>;
     map<R>(fn: Fn<T, Nullable<R>>): IOptional<R>;
-    try<R, E>(fn: Fn<T, R>): IOptional<IEither<R, E>>;
+    try<R, E>(fn: Fn<T, R>): IOptional<IResult<R, E>>;
     mapToProperty<F extends keyof T>(field: F): IOptional<T[F]>;
     flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R>;
     orElse(defaultVal: NonNullable<T>): ISome<T>;
