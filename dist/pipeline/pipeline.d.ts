@@ -9,5 +9,5 @@ export declare class Pipeline<T1, T2> implements IPipeline<T1, T2> {
     alsoDo(fn: Consumer<T2>): IPipeline<T1, T2>;
     map<T3>(fn: Fn<T2, T3>): IPipeline<T1, T3>;
     mapToProperty<F extends keyof T2>(field: F): IPipeline<T1, T2[F]>;
-    readonly callable: Fn<T1, T2>;
+    get callable(): Fn<T1, T2>;
 }

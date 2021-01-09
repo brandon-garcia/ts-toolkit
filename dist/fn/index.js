@@ -1,15 +1,23 @@
 "use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-__export(require("./compose"));
-__export(require("./lift-consumer"));
-__export(require("./lift-nullable"));
-__export(require("./lift-param"));
-__export(require("./lift-property"));
-__export(require("./lift-try"));
-__export(require("./match-compose"));
-__export(require("./partial-factory"));
-__export(require("./memoize"));
+__exportStar(require("./interface"), exports);
+__exportStar(require("./compose"), exports);
+__exportStar(require("./lift-consumer"), exports);
+__exportStar(require("./lift-nullable"), exports);
+__exportStar(require("./lift-param"), exports);
+__exportStar(require("./lift-property"), exports);
+__exportStar(require("./lift-try"), exports);
+__exportStar(require("./match-compose"), exports);
+__exportStar(require("./partial-factory"), exports);
+__exportStar(require("./memoize"), exports);
 //# sourceMappingURL=index.js.map

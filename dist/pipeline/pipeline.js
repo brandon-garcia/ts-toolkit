@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Pipeline = void 0;
 var fn_1 = require("../fn");
 var empty_pipeline_1 = require("./empty-pipeline");
 var lift_consumer_1 = require("../fn/lift-consumer");
@@ -37,7 +38,7 @@ var Pipeline = (function () {
             }
             return this.fnList[0];
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     return Pipeline;

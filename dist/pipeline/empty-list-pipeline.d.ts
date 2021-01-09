@@ -11,6 +11,6 @@ export declare class EmptyListPipeline<T1> implements IListPipeline<T1, T1> {
     filterProperty<F extends keyof T1>(field: F, fn: Predicate<T1[F]>): IListPipeline<T1, T1>;
     reduce(fn: Reducer<T1>): IPipeline<T1[], T1>;
     toFirst(): IPipeline<T1[], IOptional<T1>>;
-    readonly callable: Fn<T1[], T1[]>;
+    get callable(): Fn<T1[], T1[]>;
     private toPipeline;
 }

@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.liftTry = void 0;
 var result_1 = require("../result");
-exports.liftTry = function (fn) {
+var liftTry = function (fn) {
     return function (param) {
         var result;
         try {
@@ -13,4 +14,5 @@ exports.liftTry = function (fn) {
         return result_1.Result.success(result);
     };
 };
+exports.liftTry = liftTry;
 //# sourceMappingURL=lift-try.js.map

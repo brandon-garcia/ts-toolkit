@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ListUtils = void 0;
 var optional_1 = require("./optional");
 var head = function (_a) {
     var first = _a[0];

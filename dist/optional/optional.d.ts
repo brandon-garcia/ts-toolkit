@@ -14,7 +14,7 @@ export declare class Optional<T> implements IOptional<T> {
     static coalesce<T>(list: Array<IOptional<T>>): IOptional<T>;
     isPresent(): this is ISome<T>;
     isEmpty(): this is INone<T>;
-    readonly value: T | undefined;
+    get value(): T | undefined;
     mapToProperty<F extends keyof T>(field: F): IOptional<Required<T>[F]>;
     filter(predicate: Predicate<T>): IOptional<T>;
     filterProperty<F extends keyof T>(field: F, predicate: Predicate<NonNullable<T[F]>>): IOptional<T>;

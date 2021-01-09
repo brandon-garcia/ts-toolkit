@@ -17,6 +17,6 @@ export declare class ListPipeline<T1, T2> implements IListPipeline<T1, T2> {
     filterProperty<F extends keyof T2>(field: F, fn: Predicate<T2[F]>): IListPipeline<T1, T2>;
     reduce(fn: Reducer<T2>): IPipeline<T1[], T2>;
     toFirst(): IPipeline<T1[], IOptional<T2>>;
-    readonly callable: Fn<T1[], T2[]>;
+    get callable(): Fn<T1[], T2[]>;
     private toPipeline;
 }

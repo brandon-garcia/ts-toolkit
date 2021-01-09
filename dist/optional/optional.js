@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Optional = void 0;
 var compose_1 = require("../fn/compose");
 var lift_property_1 = require("../fn/lift-property");
 var lift_try_1 = require("../fn/lift-try");
@@ -46,7 +47,7 @@ var Optional = (function () {
         get: function () {
             return this.data == null ? undefined : this.data;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Optional.prototype.mapToProperty = function (field) {

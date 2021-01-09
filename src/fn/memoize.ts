@@ -1,9 +1,9 @@
 import {Fn} from "./interface";
+import {TypeUtils} from "../types";
 
 const getHasher = <T> (p: T): Fn<T, string> => {
-  const typeCode = typeof p;
-  if (typeCode === "number" || typeCode === "boolean" || typeCode === "string") {
-    return (p) => p.toString();
+  if (TypeUtils.number(p) || TypeUtils.boolean(p) || TypeUtils.string(p)) {
+    return (p) => (p as any).toString();
   }
   return JSON.stringify;
 };

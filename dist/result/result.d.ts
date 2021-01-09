@@ -9,7 +9,7 @@ export declare class Result<T, E> implements IResult<T, E> {
     private constructor();
     isSuccess(): this is ISuccess<T, E>;
     isError(): this is IError<T, E>;
-    readonly value: T | E;
+    get value(): T | E;
     ifError(consumer: Consumer<E>): IResult<T, E>;
     ifSuccess(consumer: Consumer<T>): IResult<T, E>;
     try<R>(fn: Fn<T, R>): IResult<R, E>;

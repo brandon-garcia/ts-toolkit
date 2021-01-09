@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Result = void 0;
 var lift_try_1 = require("../fn/lift-try");
 var Result = (function () {
     function Result(flag, data) {
@@ -22,7 +23,7 @@ var Result = (function () {
         get: function () {
             return this.data;
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     Result.prototype.ifError = function (consumer) {

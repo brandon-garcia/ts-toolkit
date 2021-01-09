@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.StringUtils = void 0;
 var regexNumeric = /^\d+$/.compile();
 var regexAlphaNumeric = /^[0-9a-zA-Z]+$/.compile();
 var getSplitter = function (delim) {

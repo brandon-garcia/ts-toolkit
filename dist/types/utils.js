@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.TypeUtils = void 0;
 var lift_param_1 = require("../fn/lift-param");
 var hasField = function (obj, field, validator) {
     return isObject(obj) &&

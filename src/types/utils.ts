@@ -13,8 +13,8 @@ const hasField = <T extends any, FName extends string, FType> (
 ): obj is T & Record<FName, FType> =>
   isObject(obj) &&
   field in obj &&
-  isNonNull(obj[field]) &&
-  validator(obj[field]);
+  isNonNull((obj as any)[field]) &&
+  validator((obj as any)[field]);
 
 const hasFields = <T extends unknown, Schema extends Record<string, TypeGuard<unknown, unknown>>> (
   obj: T,
@@ -35,7 +35,7 @@ const validateOptionalField = <T extends any, FName extends string, FType> (
   field: FName,
   validator: TypeGuard<unknown, FType>,
 ): obj is T & Partial<Record<FName, FType>> =>
-  !(field in obj) || obj[field] == null || validator(obj[field]);
+  !(field in obj) || (obj as any)[field] == null || validator((obj as any)[field]);
 
 const isNumber = <T> (v: T): v is T & number =>
   typeof v === "number";

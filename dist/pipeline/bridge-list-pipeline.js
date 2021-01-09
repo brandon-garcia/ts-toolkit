@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BridgeListPipeline = void 0;
 var pipeline_1 = require("./pipeline");
 var list_1 = require("../list");
 var lift_consumer_1 = require("../fn/lift-consumer");
@@ -41,7 +42,7 @@ var BridgeListPipeline = (function () {
             var _this = this;
             return function (list) { return _this.pipeline.callable(_this.fn(list)); };
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     BridgeListPipeline.prototype.toPipeline = function () {

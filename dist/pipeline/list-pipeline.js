@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ListPipeline = void 0;
 var pipeline_1 = require("./pipeline");
 var bridge_list_pipeline_1 = require("./bridge-list-pipeline");
 var empty_list_pipeline_1 = require("./empty-list-pipeline");
@@ -56,7 +57,7 @@ var ListPipeline = (function () {
             var _this = this;
             return function (list) { return list.map(_this.fn); };
         },
-        enumerable: true,
+        enumerable: false,
         configurable: true
     });
     ListPipeline.prototype.toPipeline = function () {

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.StringReducers = exports.BoolReducers = exports.NumberReducers = void 0;
 exports.NumberReducers = {
     max: function (first, second) { return Math.max(first, second); },
     min: function (first, second) { return Math.min(first, second); },

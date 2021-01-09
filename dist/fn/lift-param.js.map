@@ -1,1 +1,1 @@
-{"version":3,"file":"lift-param.js","sourceRoot":"","sources":["../../src/fn/lift-param.ts"],"names":[],"mappings":";;AAEa,QAAA,SAAS,GAAG,UAAQ,GAAM;IACrC,OAAA,UAAC,EAAY,IAAK,OAAA,EAAE,CAAC,GAAG,CAAC,EAAP,CAAO;AAAzB,CAAyB,CAAC"}
+{"version":3,"file":"lift-param.js","sourceRoot":"","sources":["../../src/fn/lift-param.ts"],"names":[],"mappings":";;;AAEO,IAAM,SAAS,GAAG,UAAQ,GAAM;IACrC,OAAA,UAAC,EAAY,IAAK,OAAA,EAAE,CAAC,GAAG,CAAC,EAAP,CAAO;AAAzB,CAAyB,CAAC;AADf,QAAA,SAAS,aACM"}

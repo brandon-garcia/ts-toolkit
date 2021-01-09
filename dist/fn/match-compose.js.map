@@ -1,1 +1,1 @@
-{"version":3,"file":"match-compose.js","sourceRoot":"","sources":["../../src/fn/match-compose.ts"],"names":[],"mappings":";;AAEa,QAAA,YAAY,GAAG,UAA+C,OAAwB,EAAE,KAAiC;IACpI,OAAA,UAAC,KAAQ,IAAK,OAAA,KAAK,CAAE,OAAO,CAAC,KAAK,CAAC,CAAE,CAAC,KAAK,CAAC,EAA9B,CAA8B;AAA5C,CAA4C,CAAC"}
+{"version":3,"file":"match-compose.js","sourceRoot":"","sources":["../../src/fn/match-compose.ts"],"names":[],"mappings":";;;AAEO,IAAM,YAAY,GAAG,UAA+C,OAAwB,EAAE,KAAiC;IACpI,OAAA,UAAC,KAAQ,IAAK,OAAA,KAAK,CAAE,OAAO,CAAC,KAAK,CAAC,CAAE,CAAC,KAAK,CAAC,EAA9B,CAA8B;AAA5C,CAA4C,CAAC;AADlC,QAAA,YAAY,gBACsB"}

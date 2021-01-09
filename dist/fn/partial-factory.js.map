@@ -1,1 +1,1 @@
-{"version":3,"file":"partial-factory.js","sourceRoot":"","sources":["../../src/fn/partial-factory.ts"],"names":[],"mappings":";;;;;;;;;;;;;AACa,QAAA,oBAAoB,GAAG,UAA+C,MAAkC;IACnH,OAAA,UAAC,SAAuD,IAAQ,OAAA,cAC3D,MAAM,EACN,SAAS,EACP,EAHyD,CAGzD;AAHP,CAGO,CAAC"}
+{"version":3,"file":"partial-factory.js","sourceRoot":"","sources":["../../src/fn/partial-factory.ts"],"names":[],"mappings":";;;;;;;;;;;;;;AACO,IAAM,oBAAoB,GAAG,UAA+C,MAAkC;IACnH,OAAA,UAAC,SAAuD,IAAQ,OAAA,uBAC3D,MAAM,GACN,SAAS,EACP,EAHyD,CAGzD;AAHP,CAGO,CAAC;AAJG,QAAA,oBAAoB,wBAIvB"}

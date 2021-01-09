@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.compose = function (f1, f2, f3, f4, f5, f6, f7, f8, f9, f10) {
+exports.compose = void 0;
+var compose = function (f1, f2, f3, f4, f5, f6, f7, f8, f9, f10) {
     if (f3) {
         if (f4) {
             if (f5) {
@@ -27,4 +28,5 @@ exports.compose = function (f1, f2, f3, f4, f5, f6, f7, f8, f9, f10) {
     }
     return function (p) { return f2(f1(p)); };
 };
+exports.compose = compose;
 //# sourceMappingURL=compose.js.map
