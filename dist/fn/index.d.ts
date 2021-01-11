@@ -1,5 +1,6 @@
 export * from "./interface";
 export * from "./compose";
+export * from "./identity";
 export * from "./lift-consumer";
 export * from "./lift-nullable";
 export * from "./lift-param";
