@@ -11,6 +11,10 @@ const onlyUndefined = (p: undefined) => 1;
 
 const onlyTrue = (p: true) => 1;
 
+test("optional: some and none assignments compile test", () => {
+  const some: IOptional<number> = Optional.some(1);
+  const none: IOptional<number> = Optional.none();
+})
 
 test("optional: nullable mapper compile test", () => {
   Optional.some(1)
