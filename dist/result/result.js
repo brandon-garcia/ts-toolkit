@@ -13,6 +13,16 @@ var Result = (function () {
     Result.error = function (error) {
         return new Result(false, error);
     };
+    Result.liftPromise = function (promise) {
+        return promise.then(function (data) { return Result.success(data); }, function (error) { return Result.error(error); });
+    };
+    Result.unboxPromise = function (promise) {
+        return promise.then(function (result) {
+            return result
+                .ifErrorThrow()
+                .value;
+        });
+    };
     Result.prototype.isSuccess = function () {
         return this.flag;
     };
@@ -38,12 +48,20 @@ var Result = (function () {
         }
         return this;
     };
+    Result.prototype.ifErrorThrow = function () {
+        if (!this.flag) {
+            throw this.data;
+        }
+        return this;
+    };
     Result.prototype.try = function (fn) {
         return this.flatMap(lift_try_1.liftTry(fn));
     };
-    Result.prototype.flatMap = function (fn) {
+    Result.prototype.filter = function (predicate, errorFn) {
         if (this.flag) {
-            return fn(this.data);
+            if (!predicate(this.value)) {
+                return Result.error(errorFn());
+            }
         }
         return this;
     };
@@ -52,6 +70,19 @@ var Result = (function () {
             return Result.success(fn(this.data));
         }
         return this;
+    };
+    Result.prototype.flatMap = function (fn) {
+        if (this.flag) {
+            return fn(this.data);
+        }
+        return this;
+    };
+    Result.prototype.flatMapAsync = function (fn) {
+        if (this.flag) {
+            var data = this.data;
+            return fn(data);
+        }
+        return Promise.resolve(Result.error(this.data));
     };
     Result.prototype.mapError = function (fn) {
         if (this.flag) {

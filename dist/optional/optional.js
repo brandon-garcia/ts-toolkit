@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Optional = void 0;
+var result_1 = require("../result");
 var compose_1 = require("../fn/compose");
 var lift_property_1 = require("../fn/lift-property");
 var lift_try_1 = require("../fn/lift-try");
@@ -74,6 +75,12 @@ var Optional = (function () {
         }
         return this;
     };
+    Optional.prototype.mapAsync = function (fn) {
+        if (this.data != null) {
+            return fn(this.data).then(function (data) { return Optional.of(data); });
+        }
+        return Promise.resolve(this);
+    };
     Optional.prototype.orElse = function (defaultVal) {
         if (this.isEmpty()) {
             return Optional.of(defaultVal);
@@ -112,6 +119,12 @@ var Optional = (function () {
             fn();
         }
         return this;
+    };
+    Optional.prototype.toResult = function (fn) {
+        if (this.data == null) {
+            return result_1.Result.error(fn());
+        }
+        return result_1.Result.success(this.data);
     };
     return Optional;
 }());

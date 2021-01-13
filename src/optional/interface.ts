@@ -1,6 +1,6 @@
 import {Callback, Consumer, Fn, Predicate, Supplier} from "../fn/interface";
+import {IError, IResult, ISuccess} from "../result/interface";
 import {Nullable, TypeGuard} from "../types/interface";
-import {IResult} from "../result/interface";
 
 export interface IOptionalBase<T> {
   filter<S extends T>(predicate: TypeGuard<T, S>): IOptional<S>;
@@ -9,6 +9,7 @@ export interface IOptionalBase<T> {
   filterProperty<F extends keyof T>(field: F, predicate: Predicate<T[F]>): IOptional<T>;
 
   map<R>(fn: Fn<T, Nullable<R>>): IOptional<R>;
+  mapAsync<R>(fn: Fn<T, Promise<Nullable<R>>>): Promise<IOptional<R>>;
 
   try<R, E>(fn: Fn<T, R>): IOptional<IResult<R, E>>
   mapToProperty<F extends keyof T>(field: F): IOptional<T[F]>;
@@ -24,6 +25,8 @@ export interface IOptionalBase<T> {
 
   ifPresent(fn: Consumer<T>): IOptional<T>;
   ifEmpty(fn: Callback): IOptional<T>;
+
+  toResult<E>(fn: Supplier<E>): IResult<T, E>;
 }
 
 export interface ISome<T> extends IOptionalBase<T> {
@@ -37,6 +40,9 @@ export interface ISome<T> extends IOptionalBase<T> {
   map<R>(fn: Fn<T, NonNullable<R>>): ISome<R>;
   map<R>(fn: Fn<T, Nullable<R>>): IOptional<R>;
 
+  mapAsync<R>(fn: Fn<T, Promise<Nullable<R>>>): Promise<IOptional<R>>;
+  mapAsync<R>(fn: Fn<T, Promise<NonNullable<R>>>): Promise<ISome<R>>;
+
   orElse(defaultVal: undefined | null): ISome<T>;
   orElse(defaultVal: NonNullable<T>): ISome<T>;
   orElse(defaultVal: Nullable<T>): ISome<T>;
@@ -48,6 +54,8 @@ export interface ISome<T> extends IOptionalBase<T> {
   orElseThrow<E extends Error>(fn: Supplier<E>): ISome<T>;
 
   coalesce(other: IOptionalBase<T>): ISome<T>
+
+  toResult<E>(fn: Supplier<E>): ISuccess<T, E>;
 }
 
 export interface INone<T> extends IOptionalBase<T> {
@@ -62,11 +70,17 @@ export interface INone<T> extends IOptionalBase<T> {
   ifEmpty(fn: Callback): INone<T>;
 
   map<R>(fn: Fn<T, Nullable<R>>): INone<R>;
+
+  mapAsync<R>(fn: Fn<T, Promise<Nullable<R>>>): Promise<INone<R>>;
+  mapAsync<R>(fn: Fn<T, Promise<NonNullable<R>>>): Promise<INone<R>>;
+
   mapToProperty<F extends keyof T>(field: F): INone<T[F]>;
 
   coalesce(other: ISome<T>): ISome<T>;
   coalesce(other: INone<T>): INone<T>;
   coalesce(other: IOptional<T>): IOptional<T>;
+
+  toResult<E>(fn: Supplier<E>): IError<T, E>;
 }
 
 export interface IOptional<T> extends IOptionalBase<T> {

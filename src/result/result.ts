@@ -1,6 +1,6 @@
-import {IResult, IError, ISuccess} from "./interface";
-import {Consumer, Fn} from "../fn/interface";
+import {Consumer, Fn, Predicate, Supplier} from "../fn/interface";
 import {liftTry} from "../fn/lift-try";
+import {IResult, IError, ISuccess} from "./interface";
 
 export class Result<T, E> implements IResult<T, E> {
   public static success<T, E>(data: T): ISuccess<T, E> {
@@ -9,6 +9,20 @@ export class Result<T, E> implements IResult<T, E> {
 
   public static error<T, E>(error: E): IError<T, E> {
     return new Result<T, E>(false, error) as IError<T, E>;
+  }
+
+  public static liftPromise<T>(promise: Promise<T>): Promise<IResult<T, unknown>> {
+    return promise.then(
+      (data) => Result.success(data),
+      (error) => Result.error(error),
+    );
+  }
+
+  public static unboxPromise<T, E>(promise: Promise<IResult<T, E>>): Promise<T> {
+    return promise.then((result) =>
+      result
+        .ifErrorThrow()
+        .value);
   }
 
   private constructor(flag: true, data: T)
@@ -42,8 +56,31 @@ export class Result<T, E> implements IResult<T, E> {
     return this;
   }
 
+  public ifErrorThrow(): ISuccess<T, E> {
+    if (!this.flag) {
+      throw this.data;
+    }
+    return this as ISuccess<T, E>;
+  }
+
   public try<R>(fn: Fn<T, R>): IResult<R, E> {
     return this.flatMap(liftTry(fn));
+  }
+
+  public filter(predicate: Predicate<T>, errorFn: Supplier<E>): IResult<T, E> {
+    if (this.flag) {
+      if (!predicate(this.value as T)) {
+        return Result.error(errorFn());
+      }
+    }
+    return this;
+  }
+
+  public map<R>(fn: Fn<T, R>): IResult<R, E> {
+    if (this.flag) {
+      return Result.success(fn(this.data as T));
+    }
+    return (this as unknown) as IResult<R, E>;
   }
 
   public flatMap<R>(fn: Fn<T, IResult<R, E>>): IResult<R, E> {
@@ -53,11 +90,12 @@ export class Result<T, E> implements IResult<T, E> {
     return (this as unknown) as IResult<R, E>;
   }
 
-  public map<R>(fn: Fn<T, R>): IResult<R, E> {
+  public flatMapAsync<R>(fn: Fn<T, Promise<IResult<R, E>>>): Promise<IResult<R, E>> {
     if (this.flag) {
-      return Result.success(fn(this.data as T));
+      const data = this.data as T;
+      return fn(data);
     }
-    return (this as unknown) as IResult<R, E>;
+    return Promise.resolve(Result.error(this.data as E));
   }
 
   public mapError<R>(fn: Fn<E, R>): IResult<T, R> {

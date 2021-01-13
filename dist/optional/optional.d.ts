@@ -1,5 +1,5 @@
 import { Callback, Consumer, Fn, Predicate, Supplier } from "../fn/interface";
-import { IResult } from "../result/interface";
+import { IResult } from "../result";
 import { INone, IOptional, ISome } from "./interface";
 import { Nullable } from "../types/interface";
 export declare class Optional<T> implements IOptional<T> {
@@ -20,6 +20,7 @@ export declare class Optional<T> implements IOptional<T> {
     filterProperty<F extends keyof T>(field: F, predicate: Predicate<NonNullable<T[F]>>): IOptional<T>;
     map<R>(fn: Fn<T, Nullable<R>>): IOptional<R>;
     flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R>;
+    mapAsync<R>(fn: Fn<T, Promise<Nullable<R>>>): Promise<IOptional<R>>;
     orElse(defaultVal: null | undefined): INone<T>;
     orElse(defaultVal: NonNullable<T>): ISome<T>;
     orElseGet(fn: Supplier<null | undefined>): INone<T>;
@@ -29,4 +30,5 @@ export declare class Optional<T> implements IOptional<T> {
     coalesce(other: ISome<T>): ISome<T>;
     ifPresent(fn: Consumer<T>): IOptional<T>;
     ifEmpty(fn: Callback): IOptional<T>;
+    toResult<E>(fn: Supplier<E>): IResult<T, E>;
 }
