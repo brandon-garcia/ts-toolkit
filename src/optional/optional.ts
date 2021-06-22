@@ -86,13 +86,6 @@ export class Optional<T> implements IOptional<T> {
     return (this as unknown) as IOptional<R>;
   }
 
-  public mapAsync<R>(fn: Fn<T, Promise<Nullable<R>>>): Promise<IOptional<R>> {
-    if (this.data != null) {
-      return fn(this.data).then((data) => Optional.of(data));
-    }
-    return Promise.resolve((this as unknown) as IOptional<R>);
-  }
-
   public orElse(defaultVal: null|undefined): INone<T>
   public orElse(defaultVal: NonNullable<T>): ISome<T>
   public orElse(defaultVal: Nullable<T>): IOptional<T> {

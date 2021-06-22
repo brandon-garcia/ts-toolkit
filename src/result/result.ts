@@ -11,20 +11,6 @@ export class Result<T, E> implements IResult<T, E> {
     return new Result<T, E>(false, error) as IError<T, E>;
   }
 
-  public static liftPromise<T>(promise: Promise<T>): Promise<IResult<T, unknown>> {
-    return promise.then(
-      (data) => Result.success(data),
-      (error) => Result.error(error),
-    );
-  }
-
-  public static unboxPromise<T, E>(promise: Promise<IResult<T, E>>): Promise<T> {
-    return promise.then((result) =>
-      result
-        .ifErrorThrow()
-        .value);
-  }
-
   private constructor(flag: true, data: T)
   private constructor(flag: false, data: E)
   private constructor(private readonly flag: boolean, private readonly data: T|E) {
@@ -88,14 +74,6 @@ export class Result<T, E> implements IResult<T, E> {
       return fn(this.data as T);
     }
     return (this as unknown) as IResult<R, E>;
-  }
-
-  public flatMapAsync<R>(fn: Fn<T, Promise<IResult<R, E>>>): Promise<IResult<R, E>> {
-    if (this.flag) {
-      const data = this.data as T;
-      return fn(data);
-    }
-    return Promise.resolve(Result.error(this.data as E));
   }
 
   public mapError<R>(fn: Fn<E, R>): IResult<T, R> {

@@ -20,7 +20,6 @@ export declare class Optional<T> implements IOptional<T> {
     filterProperty<F extends keyof T>(field: F, predicate: Predicate<NonNullable<T[F]>>): IOptional<T>;
     map<R>(fn: Fn<T, Nullable<R>>): IOptional<R>;
     flatMap<R>(fn: Fn<T, IOptional<R>>): IOptional<R>;
-    mapAsync<R>(fn: Fn<T, Promise<Nullable<R>>>): Promise<IOptional<R>>;
     orElse(defaultVal: null | undefined): INone<T>;
     orElse(defaultVal: NonNullable<T>): ISome<T>;
     orElseGet(fn: Supplier<null | undefined>): INone<T>;

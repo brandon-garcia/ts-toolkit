@@ -7,15 +7,6 @@ export declare type Fn5<P1, P2, P3, P4, P5, R> = (p1: P1, p2: P2, p3: P3, p4: P4
 export declare type Fn6<P1, P2, P3, P4, P5, P6, R> = (p1: P1, p2: P2, p3: P3, p4: P4, p5: P5, p6: P6) => R;
 export declare type Fn7<P1, P2, P3, P4, P5, P6, P7, R> = (p1: P1, p2: P2, p3: P3, p4: P4, p5: P5, p6: P6, p7: P7) => R;
 export declare type Fn8<P1, P2, P3, P4, P5, P6, P7, P8, R> = (p1: P1, p2: P2, p3: P3, p4: P4, p5: P5, p6: P6, p7: P7, p8: P8) => R;
-export declare type AsyncFn0<R> = Fn0<Promise<R>>;
-export declare type AsyncFn<P1, R> = Fn<P1, Promise<R>>;
-export declare type AsyncFn2<P1, P2, R> = Fn2<P1, P2, Promise<R>>;
-export declare type AsyncFn3<P1, P2, P3, R> = Fn3<P1, P2, P3, Promise<R>>;
-export declare type AsyncFn4<P1, P2, P3, P4, R> = Fn4<P1, P2, P3, P4, Promise<R>>;
-export declare type AsyncFn5<P1, P2, P3, P4, P5, R> = Fn5<P1, P2, P3, P4, P5, Promise<R>>;
-export declare type AsyncFn6<P1, P2, P3, P4, P5, P6, R> = Fn6<P1, P2, P3, P4, P5, P6, Promise<R>>;
-export declare type AsyncFn7<P1, P2, P3, P4, P5, P6, P7, R> = Fn7<P1, P2, P3, P4, P5, P6, P7, Promise<R>>;
-export declare type AsyncFn8<P1, P2, P3, P4, P5, P6, P7, P8, R> = Fn8<P1, P2, P3, P4, P5, P6, P7, P8, Promise<R>>;
 export declare type Consumer<T> = Fn<T, void>;
 export declare type Supplier<T> = Fn0<T>;
 export declare type Predicate<T> = Fn<T, boolean>;

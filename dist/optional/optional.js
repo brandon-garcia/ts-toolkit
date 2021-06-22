@@ -75,12 +75,6 @@ var Optional = (function () {
         }
         return this;
     };
-    Optional.prototype.mapAsync = function (fn) {
-        if (this.data != null) {
-            return fn(this.data).then(function (data) { return Optional.of(data); });
-        }
-        return Promise.resolve(this);
-    };
     Optional.prototype.orElse = function (defaultVal) {
         if (this.isEmpty()) {
             return Optional.of(defaultVal);

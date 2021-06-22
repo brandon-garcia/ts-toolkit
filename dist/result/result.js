@@ -13,16 +13,6 @@ var Result = (function () {
     Result.error = function (error) {
         return new Result(false, error);
     };
-    Result.liftPromise = function (promise) {
-        return promise.then(function (data) { return Result.success(data); }, function (error) { return Result.error(error); });
-    };
-    Result.unboxPromise = function (promise) {
-        return promise.then(function (result) {
-            return result
-                .ifErrorThrow()
-                .value;
-        });
-    };
     Result.prototype.isSuccess = function () {
         return this.flag;
     };
@@ -76,13 +66,6 @@ var Result = (function () {
             return fn(this.data);
         }
         return this;
-    };
-    Result.prototype.flatMapAsync = function (fn) {
-        if (this.flag) {
-            var data = this.data;
-            return fn(data);
-        }
-        return Promise.resolve(Result.error(this.data));
     };
     Result.prototype.mapError = function (fn) {
         if (this.flag) {
