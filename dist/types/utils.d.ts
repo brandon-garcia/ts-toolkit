@@ -6,7 +6,7 @@ declare type ResolvedSchema<T extends Record<string, TypeGuard<unknown, unknown>
 export declare const TypeUtils: {
     boolean: <T>(v: T) => v is (T & false) | (T & true);
     composeTypeGuard: <KnownT, MaybeT extends KnownT>(reducer: Reducer<boolean>, predicates: TypeGuard<KnownT, MaybeT>[]) => TypeGuard<KnownT, MaybeT>;
-    field: <T_1 extends unknown, FName extends string, FType>(obj: T_1, field: FName, validator: TypeGuard<unknown, FType>) => obj is T_1 & Record<FName, FType>;
+    field: <T_1 extends unknown, FName extends string, FType extends KnownFType, KnownFType = unknown>(obj: T_1, field: FName, validator: TypeGuard<KnownFType, FType>) => obj is T_1 & Record<FName, FType>;
     fields: <T_2 extends unknown, Schema extends Record<string, TypeGuard<unknown, unknown>>>(obj: T_2, schema: Schema) => obj is T_2 & ResolvedSchema<Schema>;
     function: <T_3>(v: T_3) => v is T_3 & Function;
     nonEmptyString: <T_4>(v: T_4) => v is T_4 & string;

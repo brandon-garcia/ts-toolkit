@@ -6,10 +6,10 @@ type ResolvedSchema<T extends Record<string, TypeGuard<unknown, unknown>>> = {
   [F in keyof T]: TypeGuardType<T[F]>
 };
 
-const hasField = <T extends any, FName extends string, FType> (
+const hasField = <T extends any, FName extends string, FType extends KnownFType, KnownFType = unknown> (
   obj: T,
   field: FName,
-  validator: TypeGuard<unknown, FType>,
+  validator: TypeGuard<KnownFType, FType>,
 ): obj is T & Record<FName, FType> =>
   isObject(obj) &&
   field in obj &&
