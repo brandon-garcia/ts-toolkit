@@ -1,3 +1,4 @@
+export * from "./error/interface";
 export * from "./fn/interface";
 export * from "./optional/interface";
 export * from "./pipeline/interface";

@@ -1,14 +1,14 @@
 import {Consumer, Fn, Predicate, Supplier} from "../fn/interface";
 import {liftTry} from "../fn/lift-try";
-import {IResult, IError, ISuccess} from "./interface";
+import {IResult, IFailure, ISuccess} from "./interface";
 
 export class Result<T, E> implements IResult<T, E> {
   public static success<T, E>(data: T): ISuccess<T, E> {
     return new Result<T, E>(true, data) as ISuccess<T, E>;
   }
 
-  public static error<T, E>(error: E): IError<T, E> {
-    return new Result<T, E>(false, error) as IError<T, E>;
+  public static failure<T, E>(error: E): IFailure<T, E> {
+    return new Result<T, E>(false, error) as IFailure<T, E>;
   }
 
   private constructor(flag: true, data: T)
@@ -20,7 +20,7 @@ export class Result<T, E> implements IResult<T, E> {
     return this.flag;
   }
 
-  public isError(): this is IError<T, E> {
+  public isFailure(): this is IFailure<T, E> {
     return !this.flag;
   }
 
@@ -28,7 +28,7 @@ export class Result<T, E> implements IResult<T, E> {
     return this.data;
   }
 
-  public ifError(consumer: Consumer<E>): IResult<T, E> {
+  public ifFailure(consumer: Consumer<E>): IResult<T, E> {
     if (!this.flag) {
       consumer(this.data as E);
     }
@@ -42,7 +42,7 @@ export class Result<T, E> implements IResult<T, E> {
     return this;
   }
 
-  public ifErrorThrow(): ISuccess<T, E> {
+  public ifFailureThrow(): ISuccess<T, E> {
     if (!this.flag) {
       throw this.data;
     }
@@ -56,7 +56,7 @@ export class Result<T, E> implements IResult<T, E> {
   public filter(predicate: Predicate<T>, errorFn: Supplier<E>): IResult<T, E> {
     if (this.flag) {
       if (!predicate(this.value as T)) {
-        return Result.error(errorFn());
+        return Result.failure(errorFn());
       }
     }
     return this;
@@ -76,14 +76,14 @@ export class Result<T, E> implements IResult<T, E> {
     return (this as unknown) as IResult<R, E>;
   }
 
-  public mapError<R>(fn: Fn<E, R>): IResult<T, R> {
+  public mapFailure<R>(fn: Fn<E, R>): IResult<T, R> {
     if (this.flag) {
       return (this as unknown) as IResult<T, R>;
     }
-    return Result.error(fn(this.data as E));
+    return Result.failure(fn(this.data as E));
   }
 
-  public flatMapError<R>(fn: Fn<E, IResult<T, R>>): IResult<T, R> {
+  public flatMapFailure<R>(fn: Fn<E, IResult<T, R>>): IResult<T, R> {
     if (this.flag) {
       return (this as unknown) as IResult<T, R>;
     }

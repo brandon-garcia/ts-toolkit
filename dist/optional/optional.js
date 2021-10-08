@@ -116,7 +116,7 @@ var Optional = (function () {
     };
     Optional.prototype.toResult = function (fn) {
         if (this.data == null) {
-            return result_1.Result.error(fn());
+            return result_1.Result.failure(fn());
         }
         return result_1.Result.success(this.data);
     };

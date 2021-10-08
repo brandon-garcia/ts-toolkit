@@ -10,13 +10,13 @@ var Result = (function () {
     Result.success = function (data) {
         return new Result(true, data);
     };
-    Result.error = function (error) {
+    Result.failure = function (error) {
         return new Result(false, error);
     };
     Result.prototype.isSuccess = function () {
         return this.flag;
     };
-    Result.prototype.isError = function () {
+    Result.prototype.isFailure = function () {
         return !this.flag;
     };
     Object.defineProperty(Result.prototype, "value", {
@@ -26,7 +26,7 @@ var Result = (function () {
         enumerable: false,
         configurable: true
     });
-    Result.prototype.ifError = function (consumer) {
+    Result.prototype.ifFailure = function (consumer) {
         if (!this.flag) {
             consumer(this.data);
         }
@@ -38,7 +38,7 @@ var Result = (function () {
         }
         return this;
     };
-    Result.prototype.ifErrorThrow = function () {
+    Result.prototype.ifFailureThrow = function () {
         if (!this.flag) {
             throw this.data;
         }
@@ -50,7 +50,7 @@ var Result = (function () {
     Result.prototype.filter = function (predicate, errorFn) {
         if (this.flag) {
             if (!predicate(this.value)) {
-                return Result.error(errorFn());
+                return Result.failure(errorFn());
             }
         }
         return this;
@@ -67,13 +67,13 @@ var Result = (function () {
         }
         return this;
     };
-    Result.prototype.mapError = function (fn) {
+    Result.prototype.mapFailure = function (fn) {
         if (this.flag) {
             return this;
         }
-        return Result.error(fn(this.data));
+        return Result.failure(fn(this.data));
     };
-    Result.prototype.flatMapError = function (fn) {
+    Result.prototype.flatMapFailure = function (fn) {
         if (this.flag) {
             return this;
         }

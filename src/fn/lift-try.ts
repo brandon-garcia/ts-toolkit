@@ -7,7 +7,7 @@ export const liftTry = <T, R, E> (fn: Fn<T, R>): Fn<T, IResult<R, E>> =>
     try {
       result = fn(param);
     } catch (err) {
-      return Result.error<R, E>(err);
+      return Result.failure<R, E>(err);
     }
     return Result.success<R, E>(result);
   };

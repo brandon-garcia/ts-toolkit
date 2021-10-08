@@ -9,7 +9,7 @@ var liftTry = function (fn) {
             result = fn(param);
         }
         catch (err) {
-            return result_1.Result.error(err);
+            return result_1.Result.failure(err);
         }
         return result_1.Result.success(result);
     };

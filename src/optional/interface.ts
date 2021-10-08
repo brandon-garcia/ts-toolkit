@@ -1,5 +1,5 @@
 import {Callback, Consumer, Fn, Predicate, Supplier} from "../fn/interface";
-import {IError, IResult, ISuccess} from "../result/interface";
+import {IFailure, IResult, ISuccess} from "../result/interface";
 import {Nullable, TypeGuard} from "../types/interface";
 
 export interface IOptionalBase<T> {
@@ -73,7 +73,7 @@ export interface INone<T> extends IOptionalBase<T> {
   coalesce(other: INone<T>): INone<T>;
   coalesce(other: IOptional<T>): IOptional<T>;
 
-  toResult<E>(fn: Supplier<E>): IError<T, E>;
+  toResult<E>(fn: Supplier<E>): IFailure<T, E>;
 }
 
 export interface IOptional<T> extends IOptionalBase<T> {

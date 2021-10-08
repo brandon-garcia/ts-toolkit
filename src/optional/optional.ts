@@ -139,7 +139,7 @@ export class Optional<T> implements IOptional<T> {
 
   public toResult<E>(fn: Supplier<E>): IResult<T, E> {
     if (this.data == null) {
-      return Result.error(fn());
+      return Result.failure(fn());
     }
     return Result.success(this.data);
   }
